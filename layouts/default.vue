@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer
+<!--    <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -23,20 +23,20 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer>-->
     <v-main>
-      <v-container>
+      <v-container fluid>
         <Nuxt />
       </v-container>
     </v-main>
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
+<!--      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />-->
+<!--      <v-btn icon @click.stop="miniVariant = !miniVariant">-->
+<!--        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>-->
+<!--      </v-btn>-->
+      <v-toolbar-title v-text="title"/>
       <v-spacer />
-      <v-btn color="primary">Login</v-btn>
+      <v-btn color="primary" nuxt to="/login">Login</v-btn>
     </v-app-bar>
     <v-footer :absolute="true" app content="center">
       <span>&copy; {{ new Date().getFullYear() }}</span>
@@ -49,7 +49,7 @@ export default {
   name: 'NavDrawer',
   data() {
     return {
-      clipped: true,
+      clipped: false,
       drawer: false,
       items: [
         {
@@ -71,3 +71,7 @@ export default {
   },
 }
 </script>
+
+<style>
+html { overflow-y: auto }
+</style>

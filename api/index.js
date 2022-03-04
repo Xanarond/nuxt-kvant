@@ -16,7 +16,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 require('../api/routes/main.routes')(app)
-const db = require('../api/models/sequelize')
+const db = require('../api/models/index')
 
 /* const httpsOptions = {
   key: fs.readFileSync("./ssl/index.key"), // путь к ключу

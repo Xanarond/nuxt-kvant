@@ -1,7 +1,7 @@
 module.exports = {
-  HOST: '106.109.40.63',
-  USER: 'postgres',
-  PASSWORD: '2021',
+  HOST: '127.0.0.1',
+  USER: 'user_kwant',
+  PASSWORD: '1',
   DB: 'kwantdb',
   dialect: 'postgres',
   pool: {
