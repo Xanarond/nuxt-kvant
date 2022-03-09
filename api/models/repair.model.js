@@ -28,7 +28,7 @@ module.exports = (sequelize, Sequelize) => {
     'RB BARCODE': {
       type: Sequelize.INTEGER,
     },
-    'COMMENT': {
+    COMMENT: {
       type: Sequelize.TEXT,
     },
     'Repair DATE': {

@@ -34,7 +34,7 @@ module.exports = (sequelize, Sequelize) => {
     'RB BARCODE': {
       type: Sequelize.STRING,
     },
-    'COMMENT': {
+    COMMENT: {
       type: Sequelize.TEXT,
     },
     '1st Insp DATE': {

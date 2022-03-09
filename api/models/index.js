@@ -12,7 +12,7 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     acquire: config.pool.acquire,
     idle: config.pool.idle,
   },
-  port: config.port
+  port: config.port,
 })
 
 const db = {}
@@ -22,7 +22,10 @@ db.sequelize = sequelize
 
 db.user = require('../models/user.model.js')(sequelize, Sequelize)
 db.role = require('../models/role.model.js')(sequelize, Sequelize)
-db.refreshToken = require('../models/refreshToken.model.js')(sequelize, Sequelize)
+db.refreshToken = require('../models/refreshToken.model.js')(
+  sequelize,
+  Sequelize
+)
 db.inspection = require('../models/inspection.model')(sequelize, Sequelize)
 db.repair = require('../models/repair.model')(sequelize, Sequelize)
 db.storage = require('../models/storage.model')(sequelize, Sequelize)

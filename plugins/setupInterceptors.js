@@ -1,5 +1,5 @@
-import api from './api'
-import TokenService from './token.service'
+import api from '../services/api'
+import TokenService from '../services/token.service'
 
 export default ({ store }) => {
   api.interceptors.request.use(

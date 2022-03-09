@@ -16,21 +16,6 @@ checkDuplicate = (req, res, next) => {
       return
     }
     next()
-    /*  // Division
-    User.findOne({
-      where: {
-        division: req.body.division
-      }
-    }).then(user => {
-      if (user) {
-        res.status(400).send({
-          message: "Failed! Email is already in use!"
-        });
-        return;
-      }
-
-      next();
-    }); */
   })
 }
 
