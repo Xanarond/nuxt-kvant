@@ -71,7 +71,7 @@ export default {
           const reader = new FileReader()
           reader.onload = e => {
             const data = e.target.result
-            const workbook = XLSX.read(data)
+            const workbook = XLSX.read(data, { type: "binary", cellDates: true })
             /*  const filename = 'Panels_copy.xlsm'
              XLSX.writeFile(workbook, filename); */
             const workSheet = workbook.Sheets.DATA
@@ -93,7 +93,11 @@ export default {
                 "2nd Insp DATE": null,
                 "Putaway DATE": null,
                 "Outbound DATE": null,
-                "Scrap DATE": null
+                "Scrap DATE": null,
+                "Global Status": "Inspection",
+                "Local Status": "Pending",
+                "BOX": null,
+                "Location": null
               }
               result.push(obj)
             })
@@ -112,12 +116,13 @@ export default {
         && "FileReader" in window
     },
     submitFile(data) {
-      console.log(data[0])
-      TableService.postDataTable(data[0])
+      const dataSet = new Set(data[0])
+      const filterArr = [...dataSet]
+      TableService.postDataTable(filterArr)
       this.message = "Данные успешно добавлены"
       window.setTimeout(() => {
         this.alert = false
-        this.message = ''
+        this.message = ""
         this.file = ""
         this.result = ""
         // this.$router.push("/")

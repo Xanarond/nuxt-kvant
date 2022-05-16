@@ -1,10 +1,11 @@
 <template>
-  <v-row justify="center">
     <DxDataGrid
       :show-borders="true"
       :data-source="content"
+      :allow-column-reordering="true"
       alignment="center"
-      key-expr="ID"
+      key-expr="id"
+      :column-width="150"
     >
       <DxExport :enabled="true" :allow-export-selected-data="true" />
       <DxHeaderFilter
@@ -46,29 +47,36 @@
             item-type="group"
             caption="Dates"
           >
-            <DxItem data-field="1st Insp DATE" :value="'17/03/2022'" />
+            <DxItem data-field="1st Insp DATE" />
             <DxItem data-field="2nd Insp DATE" />
           </DxItem>
         </DxForm>
       </DxEditing>
-      <DxColumn :width="70" data-field="ID" :allow-editing="false" />
+      <DxColumn :width="120" data-field="id" :allow-editing="false" caption="ID" alignment="center"  />
       <DxColumn data-field="MATERIAL" caption="MATERIAL" />
       <DxColumn data-field="CLAIM" />
       <DxColumn data-field="INCH (FACT)" />
       <DxColumn :width="180" data-field="SERIAL NUMBER" />
       <DxColumn :width="170" data-field="SU" />
       <DxColumn :width="125" data-field="STATUS" />
-      <DxColumn :width="170" data-field="BOX" />
       <DxColumn :width="170" data-field="RB BARCODE" />
       <DxColumn data-field="COMMENT" />
       <DxColumn data-field="1st Insp DATE" data-type="date" />
       <DxColumn data-field="2nd Insp DATE" data-type="date" />
+      <DxColumn data-field="Global Status" alignment="center"  />
+      <DxColumn data-field="Local Status" alignment="center"  />
+      <DxColumn data-field="BOX" alignment="center"  />
+      <DxColumn data-field="Location" alignment="center"  />
       <DxScrolling
         column-rendering-mode="virtual"
         row-rendering-mode="infinite"
       />
+      <DxPaging :page-size="10"/>
+      <DxPager
+        :show-page-size-selector="true"
+        :allowed-page-sizes="[10, 20, 50, 100, 250, 500]"
+      />
     </DxDataGrid>
-  </v-row>
 </template>
 
 <script>
@@ -78,11 +86,11 @@ import DxDataGrid, {
   DxExport,
   DxFilterRow,
   DxForm,
-  DxHeaderFilter,
+  DxHeaderFilter, DxPager,
   DxPaging,
   DxPopup,
-  DxScrolling,
-} from 'devextreme-vue/data-grid'
+  DxScrolling
+} from "devextreme-vue/data-grid"
 import { DxTextArea } from 'devextreme-vue/text-area'
 import { DxItem } from 'devextreme-vue/form'
 import TableService from '@/services/table.service'
@@ -105,26 +113,13 @@ export default {
     DxForm,
     DxItem,
     DxPaging,
+    DxPager
   },
 
   data: () => ({
     content: '',
     showFilterRow: true,
     showHeaderFilter: true,
-    columns: [
-      'ID',
-      'MATERIAL',
-      'CLAIM',
-      'INCH (FACT)',
-      'SERIAL NUMBER',
-      'SU',
-      'STATUS',
-      'BOX',
-      'RB BARCODE',
-      'COMMENT',
-      '1st Insp DATE',
-      '2nd Insp DATE',
-    ],
   }),
   mounted() {
     TableService.getInspectionTable().then(

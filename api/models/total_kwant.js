@@ -50,6 +50,18 @@ module.exports = (sequelize, Sequelize) =>
       },
       "Scrap DATE": {
         type: Sequelize.DATEONLY
+      },
+      "Global Status": {
+        type: Sequelize.STRING
+      },
+      "Local Status": {
+        type: Sequelize.STRING
+      },
+      "BOX": {
+        type: Sequelize.INTEGER
+      },
+      "Location": {
+        type: Sequelize.STRING
       }
     },
     {

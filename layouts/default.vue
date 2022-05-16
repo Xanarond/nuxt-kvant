@@ -156,7 +156,7 @@
               text
               @click="dialog = false"
             >
-              Disagree
+              Cancel
             </v-btn>
             <v-btn
               color="green darken-1"
@@ -164,14 +164,14 @@
               @click.prevent="logOut"
               @click="dialog = false"
             >
-              Agree
+              OK
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-app-bar>
     <v-footer :absolute="true" app content="center">
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <span>KWANT DB &copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>

@@ -15,11 +15,10 @@ exports.mainTable = (req, res) => {
   const currentDateresult = []
   const p1 = new Promise((resolve, reject) => {
     try {
-      const sql_req = `SELECT "id", "MATERIAL", "CLAIM", "INCH (FACT)", "SERIAL NUMBER", "SU", "DESTINATION", "CODE", "RB BARCODE", "COMMENT", "Upload DATE", "1st Insp DATE", "2nd Insp DATE", "Putaway DATE", "Outbound DATE", "Scrap DATE", "createdAt", "updatedAt" FROM public.total_kwant`
+      const sql_req = `SELECT "id", "MATERIAL", "CLAIM", "INCH (FACT)", "SERIAL NUMBER", "SU", "DESTINATION", "CODE", "RB BARCODE", "COMMENT", "Upload DATE", "1st Insp DATE", "2nd Insp DATE", "Putaway DATE", "Outbound DATE", "Scrap DATE", "Global Status", "Local Status", "Location", "BOX" FROM public.total_kwant`
       client.query(sql_req, (err, result) =>
         err ? console.log(err.stack) : currentDateresult.push(result.rows)
       )
-
       setTimeout(() => resolve(currentDateresult), 500) // add timeout for load data
       setTimeout(() => reject(new Error("Something went wrong!")), 500)
     } catch (e) {
@@ -35,7 +34,26 @@ exports.mainTable = (req, res) => {
 }
 
 exports.inspectionTable = (req, res) => {
-  res.json(insp)
+  let inspectionTotal = {}
+  const currentDateresult = []
+  const p1 = new Promise((resolve, reject) => {
+    try {
+      const sql_req = `SELECT "id", "MATERIAL", "CLAIM", "INCH (FACT)", "SERIAL NUMBER", "SU", "STATUS", "BOX", "RB BARCODE", "COMMENT", "1st Insp DATE", "2nd Insp DATE", "2nd Insp TIME",  "Global Status", "Local Status", "Location", "BOX" FROM public.inspection;`
+      client.query(sql_req, (err, result) =>
+        err ? console.log(err.stack) : currentDateresult.push(result.rows)
+      )
+      setTimeout(() => resolve(currentDateresult), 500) // add timeout for load data
+      setTimeout(() => reject(new Error("Something went wrong!")), 500)
+    } catch (e) {
+      console.log(e)
+    }
+  })
+  p1.then(values => {
+    inspectionTotal = values
+    res.send(inspectionTotal.flat(2))
+  }).catch(e => {
+    console.log(e, "No response from the server")
+  })
 }
 
 exports.repairTable = (req, res) => {

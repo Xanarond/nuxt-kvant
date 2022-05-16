@@ -4,7 +4,7 @@
       <v-dialog v-model="dialog" persistent scrollable max-width="1000px">
         <template #activator="{ on, attrs }">
           <v-btn color="primary" dark v-bind="attrs" v-on="on">
-            Add Items
+            Update Items
           </v-btn>
         </template>
         <form
@@ -15,7 +15,7 @@
         >
           <v-card>
             <v-card-title>
-              <span class="text-h5">Add/Update Status Panel</span>
+              <span class="text-h5">Update Status Panel</span>
             </v-card-title>
             <v-card-text>
               <v-container>
@@ -26,8 +26,8 @@
                         :key="item.key"
                         ref="field"
                         v-model="panels[index]"
-                        label="№ Panel"
-                        :rules="rules"
+                        label="№ SU"
+                        :rules="su_rules"
                       ></v-text-field>
                     </template>
                   </v-col>
@@ -36,14 +36,22 @@
                     <v-select
                       v-model="section"
                       :items="[...manageItems]"
-                      label="Section"
+                      label="Global Status"
                       required
                     ></v-select>
                     <v-select
                       v-model="status"
-                      :items="['Scrap', 'Audit', 'Repair', 'Pending']"
-                      label="Status"
+                      :items="[...manageLocalStatus]"
+                      label="Local Status"
                     ></v-select>
+                    <v-text-field
+                      ref="field"
+                      label="Location"
+                    ></v-text-field>
+                    <v-text-field
+                      ref="field"
+                      label="BOX"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -55,14 +63,14 @@
                 Close
               </v-btn>
               <v-btn
-                v-if="panels.length === 0 || section.length === 0 || status === '' "
+                v-if="panels.length === 0 || section.length === 0 && status === ''"
                 color="blue darken-1"
                 type="submit"
                 text
                 disabled
                 @click="dialog = false"
               >
-                Send to db
+                Send
               </v-btn>
               <v-btn
                 v-else
@@ -71,7 +79,7 @@
                 text
                 @click="dialog = false"
               >
-                Send to db
+                Send
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -87,14 +95,16 @@ import TableService from "@/services/table.service"
 export default {
   name: "AddItemDialog",
   data: () => ({
-    rules: [
-      value => !!value || "Username Required.",
-      value => (value && value.length >= 3) || "Min 3 characters"
+    su_rules: [
+      value => !!value || "SU Number Required.",
+      value => (value && value.length <= 6) || "Max 6 characters"
     ],
     dialog: false,
     panels: [],
     section: [],
     status: "",
+    location: "",
+    box: "",
     componentKey: 0
   }),
   computed: {
@@ -103,22 +113,36 @@ export default {
         return ["Inspection", "Repair", "Storage", "Archive"]
       }
       return this.$store.state.user.division
+    },
+    manageLocalStatus() {
+      switch (this.section) {
+        case "Inspection":
+          return ["Pending", "Checked", "Scrap", "Archived"]
+        case "Storage":
+          return ["Pending", "SERK_repair", "Scrap", "Archived"]
+        case "Repair":
+          return ["Pending", "SERK_repair", "Checked", "Scrap", "Archived"]
+        case "Archive":
+          return ["Scrap", "Archived"]
+        default:
+          return
+      }
     }
   },
-  mounted() {
-    console.log(this.$store.state.user)
-  },
   methods: {
-    closeDialog(){
+    closeDialog() {
       this.panels = []
       this.section = ""
       this.status = ""
+      this.location = ""
+      this.box = ""
       this.componentKey += 1
       this.dialog = false
     },
     handleItemAdd() {
-      console.log(this.panels, this.section, this.status)
-      TableService.postItems(this.panels, this.section, this.status)
+      const panelsSet = new Set().add(...this.panels)
+      console.log(panelsSet, this.section, this.status, this.location, this.box)
+      TableService.postItems([...panelsSet], this.section, this.status, this.location, this.box)
       this.panels = []
       this.section = ""
       this.status = ""

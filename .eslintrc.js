@@ -18,5 +18,7 @@ module.exports = {
     'no-console': 'off',
     'comma-dangle': 'off',
     'no-debugger': 'off',
+    'vue/return-in-computed-property': 'off',
+    'no-useless-return': 'off'
   },
 }

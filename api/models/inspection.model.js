@@ -2,10 +2,6 @@ module.exports = (sequelize, Sequelize) =>
   sequelize.define(
     'inspection',
     {
-      'ID': {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-      },
       MATERIAL: {
         type: Sequelize.STRING,
       },
@@ -13,7 +9,7 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING,
       },
       'INCH (FACT)': {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       'SERIAL NUMBER': {
         type: Sequelize.STRING,
@@ -23,9 +19,6 @@ module.exports = (sequelize, Sequelize) =>
       },
       STATUS: {
         type: Sequelize.STRING,
-      },
-      BOX: {
-        type: Sequelize.INTEGER,
       },
       'RB BARCODE': {
         type: Sequelize.INTEGER,
@@ -42,6 +35,18 @@ module.exports = (sequelize, Sequelize) =>
       '2nd Insp TIME': {
         type: Sequelize.TIME,
       },
+      "Global Status": {
+        type: Sequelize.STRING
+      },
+      "Local Status": {
+        type: Sequelize.STRING
+      },
+      "BOX": {
+        type: Sequelize.INTEGER
+      },
+      "Location": {
+        type: Sequelize.STRING
+      }
     },
     {
       underscored: false,

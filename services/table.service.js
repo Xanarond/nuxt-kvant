@@ -9,11 +9,20 @@ class TableService {
     return api.get("tables/inspection")
   }
 
-  postItems(num, loc, stat) {
+  /**
+   * @param {*[]} nums номера su
+   * @param {[]} gs глобальный статус
+   * @param {string} ls локальный статус
+   * @param loc Location
+   * @param box BOX
+   */
+  postItems(nums, gs, ls, loc, box) {
     return api.post("datasets/update", {
-      serial_nums: num,
+      serial_nums: nums,
+      global_status: gs,
+      local_status: ls,
       location: loc,
-      status: stat
+      box
     })
   }
 
