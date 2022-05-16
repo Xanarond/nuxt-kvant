@@ -33,7 +33,7 @@
           ></v-text-field>
         </v-row>
         <v-row>
-          <!--            :rules="[password_rules.password]"-->
+          <!-- :rules="[password_rules.required, password_rules.password]""-->
           <v-text-field
             v-model="user.password"
             autocomplete="current-password"
@@ -42,11 +42,14 @@
             :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
             :type="value ? 'password' : 'text'"
             @click:append="() => (value = !value)"
-            @input="(_) => (user.password = _)"
+            @input="_ => (user.password = _)"
           ></v-text-field>
         </v-row>
         <v-row justify="center">
-          <v-btn block color="primary" type="submit" @click="alert = true">
+          <v-btn v-if="user.username === '' || user.password === ''" block color="primary" disabled type="submit" @click="alert = true">
+            Login
+          </v-btn>
+          <v-btn v-else block color="primary" type="submit" @click="alert = true">
             Login
           </v-btn>
         </v-row>
@@ -62,8 +65,8 @@ export default {
   name: 'LoginPage',
   data: () => ({
     rules: [
-      (value) => !!value || 'Username Required.',
-      (value) => (value && value.length >= 3) || 'Min 3 characters',
+      value => !!value || 'Username Required.',
+      value => (value && value.length >= 3) || 'Min 3 characters',
     ],
     user: new User('', ''),
     loading: false,
@@ -72,8 +75,8 @@ export default {
     alert: false,
     message: '',
     password_rules: {
-      required: (value) => !!value || 'Required.',
-      password: (value) => {
+      required: value => !!value || 'Required.',
+      password: value => {
         const pattern =
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})/
         return (
@@ -105,7 +108,7 @@ export default {
           () => {
             this.$router.push('/')
           },
-          (error) => {
+          error => {
             this.loading = false
             this.message =
               (error.response &&
@@ -113,7 +116,7 @@ export default {
                 error.response.data.message) ||
               error.message ||
               error.toString()
-          }
+          },
         )
       }
     },

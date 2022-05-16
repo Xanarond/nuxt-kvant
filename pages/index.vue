@@ -1,9 +1,5 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <h2>Общая таблица</h2>
-    </v-row>
-  </v-container>
+  <MainTable />
 </template>
 
 <script>

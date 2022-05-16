@@ -1,10 +1,12 @@
 <template>
-  <h2>Таблица ремонта</h2>
+  <v-container fluid>
+    <InspectionTable />
+  </v-container>
 </template>
 
 <script>
 export default {
-  name: 'RepairPage',
+  name: "RepairPage"
 }
 </script>
 

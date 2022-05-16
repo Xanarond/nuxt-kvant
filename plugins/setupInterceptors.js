@@ -1,42 +1,38 @@
-import api from '../services/api'
-import TokenService from '../services/token.service'
+import api from "../services/api"
+import TokenService from "../services/token.service"
 
 export default ({ store }) => {
   api.interceptors.request.use(
-    (config) => {
+    config => {
       const token = TokenService.getLocalAccessToken()
       if (token) {
-        config.headers['x-access-token'] = token // for Node.js Express back-end
+        config.headers["x-access-token"] = token // for Node.js Express back-end
       }
       // eslint-disable-next-line no-console
       console.log(config)
       return config
     },
-    (error) => {
-      return Promise.reject(error)
-    }
+    error => Promise.reject(error)
   )
 
   api.interceptors.response.use(
-    (res) => {
-      return res
-    },
-    async (err) => {
+    res => res,
+    async err => {
       const originalConfig = err.config
       // eslint-disable-next-line no-console
-      if (originalConfig.url !== '/auth/signin' && err.response) {
+      if (originalConfig.url !== "/auth/signin" && err.response) {
         // Access Token was expired
         if (err.response.status === 401 && !originalConfig._retry) {
           originalConfig._retry = true
 
           try {
-            const rs = await api.post('/auth/refreshtoken', {
-              refreshToken: TokenService.getLocalRefreshToken(),
+            const rs = await api.post("/auth/refreshtoken", {
+              refreshToken: TokenService.getLocalRefreshToken()
             })
 
             const { accessToken } = rs.data
 
-            store.dispatch('refreshToken', accessToken)
+            store.dispatch("refreshToken", accessToken)
             TokenService.updateLocalAccessToken(accessToken)
 
             return api(originalConfig)
@@ -45,7 +41,6 @@ export default ({ store }) => {
           }
         }
       }
-
       return Promise.reject(err)
     }
   )

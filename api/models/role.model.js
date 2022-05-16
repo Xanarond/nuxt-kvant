@@ -1,5 +1,5 @@
-module.exports = (sequelize, Sequelize) => {
-  return sequelize.define('roles', {
+module.exports = (sequelize, Sequelize) =>
+  sequelize.define('roles', {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
@@ -8,4 +8,3 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
     },
   })
-}

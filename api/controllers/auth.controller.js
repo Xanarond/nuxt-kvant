@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const config = require('../config/auth.config')
+
 const { user: User, role: Role, refreshToken: RefreshToken } = db
-const Op = db.Sequelize.Op
 
 exports.signup = (req, res) => {
   // Save User to Database
@@ -11,29 +11,25 @@ exports.signup = (req, res) => {
     username: req.body.username,
     division: req.body.division,
     password: bcrypt.hashSync(req.body.password, 8),
-    roles: req.body.roles,
+    role: req.body.role,
   })
-    .then((user) => {
-      if (req.body.roles) {
-        Role.findAll({
+    .then(user => {
+      if (req.body.role) {
+        Role.findOne({
           where: {
-            name: {
-              [Op.or]: req.body.roles,
-            },
+            name: req.body.role,
           },
-        }).then((roles) => {
+        }).then(roles => {
           user.setRoles(roles).then(() => {
             res.send({ message: 'User registered successfully!' })
           })
         })
-      } else {
-        // user role = 1
-        user.setRoles([1]).then(() => {
-          res.send({ message: 'User registered successfully!' })
-        })
+      }
+      if(!req.body.username){
+        res.send({ message: 'User name is not empty' })
       }
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(500).send({ message: err.message })
     })
 }
@@ -44,14 +40,14 @@ exports.signin = (req, res) => {
       username: req.body.username,
     },
   })
-    .then(async (user) => {
+    .then(async user => {
       if (!user) {
         return res.status(404).send({ message: 'User Not found.' })
       }
 
       const passwordIsValid = bcrypt.compareSync(
         req.body.password,
-        user.password
+        user.password,
       )
 
       if (!passwordIsValid) {
@@ -67,23 +63,23 @@ exports.signin = (req, res) => {
 
       const refreshToken = await RefreshToken.createToken(user)
 
-      const authorities = []
-      user.getRoles().then((roles) => {
+      user.getRoles().then(roles => {
+        let authority
         for (let i = 0; i < roles.length; i++) {
-          authorities.push('ROLE_' + roles[i].name.toUpperCase())
+          authority = `ROLE_${roles[i].name.toUpperCase()}`
         }
 
         res.status(200).send({
           id: user.id,
           username: user.username,
           division: user.division,
-          roles: authorities,
+          role: authority,
           accessToken: token,
           refreshToken,
         })
       })
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(500).send({ message: err.message })
     })
 }

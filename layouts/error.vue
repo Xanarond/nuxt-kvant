@@ -10,7 +10,7 @@
         </h1></v-row
       >
       <v-row justify="center">
-        <NuxtLink to="/">Home page</NuxtLink>
+        <v-btn nuxt to="/">Home page</v-btn>
       </v-row>
     </v-container>
   </v-app>

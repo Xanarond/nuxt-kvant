@@ -39,7 +39,8 @@
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <v-btn color="primary" depressed nuxt to="/" style="margin-right: 10px"
-        >Главная</v-btn
+      >Главная
+      </v-btn
       >
       <v-btn color="primary" nuxt to="/login">Login</v-btn>
     </v-app-bar>
@@ -50,40 +51,124 @@
       <!--      </v-btn>-->
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn color="primary" depressed nuxt to="/" style="margin-right: 10px"
-        >Главная</v-btn
+
+      <div v-if="$store.state.user">
+        <AddItemDialog />
+      </div>
+      <v-btn
+        v-if="useAdminRules"
+        depressed
+        nuxt
+        to="/append"
+        color="primary"
+        style="margin-right: 10px"
+      >Add Rows from file
+      </v-btn
       >
       <v-btn
-        v-if="$store.state.user.division === 'inspection'"
+        v-if="useAdminRules"
+        depressed
+        nuxt
+        to="/signup"
+        color="primary"
+        style="margin-right: 10px"
+      >Add Users
+      </v-btn>
+      <v-btn v-if="!useAdminRules" color="primary" depressed nuxt to="/" style="margin-right: 10px"
+      >MainPage</v-btn>
+      <v-btn
+        v-if="$store.state.user.division === 'Inspection' && !useAdminRules"
         color="primary"
         depressed
         nuxt
         to="/inspection"
         style="margin-right: 10px"
-        >Inspection</v-btn
-      >
+      >Inspection
+      </v-btn>
       <v-btn
-        v-if="$store.state.user.division === 'storage'"
+        v-if="$store.state.user.division === 'Storage' && !useAdminRules"
         color="primary"
         depressed
         nuxt
         to="/storage"
         style="margin-right: 10px"
-        >Storage</v-btn
-      >
+      >Storage
+      </v-btn>
       <v-btn
-        v-if="$store.state.user.division === 'repair'"
+        v-if="$store.state.user.division === 'Repair' && !useAdminRules"
         color="primary"
         depressed
         nuxt
         to="/repair"
         style="margin-right: 10px"
-        >Repair</v-btn
+      >Repair
+      </v-btn>
+      <v-btn
+        v-if="$store.state.user.division === 'Archive' && !useAdminRules"
+        color="primary"
+        depressed
+        nuxt
+        to="/archive"
+        style="margin-right: 10px"
+      >Archive
+      </v-btn>
+      <v-menu v-if="useAdminRules" offset-y>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            color="primary"
+            dark
+            v-bind="attrs"
+            style="margin-right: 10px"
+            v-on="on"
+          >
+            Sections
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            nuxt :to="item.to"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-btn v-if="!$store.state.user" color="primary" to="/login">Login</v-btn>
+      <v-dialog
+        v-else
+        v-model="dialog"
+        max-width="600px"
+        persistent
       >
-      <v-btn v-if="!$store.state.user" color="primary" nuxt to="/login"
-        >Login</v-btn
-      >
-      <v-btn v-else color="primary" @click.prevent="logOut">Logout</v-btn>
+        <template #activator="{ on, attrs }">
+          <v-btn color="primary" v-bind="attrs" dark v-on="on">Logout</v-btn>
+        </template>
+        <v-card>
+          <v-card-title class="text-h5 justify-center">
+            Are you sure about that?
+          </v-card-title>
+          <!--<v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>-->
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="red darken-1"
+              text
+              @click="dialog = false"
+            >
+              Disagree
+            </v-btn>
+            <v-btn
+              color="green darken-1"
+              text
+              @click.prevent="logOut"
+              @click="dialog = false"
+            >
+              Agree
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-app-bar>
     <v-footer :absolute="true" app content="center">
       <span>&copy; {{ new Date().getFullYear() }}</span>
@@ -92,64 +177,68 @@
 </template>
 
 <script>
-import EventBus from '@/middleware/EventBus'
+import EventBus from "@/middleware/EventBus"
 
 export default {
-  name: 'NavDrawer',
+  name: "NavDrawer",
   data() {
     return {
       clipped: false,
       drawer: false,
       items: [
         {
-          icon: 'mdi-human-greeting',
-          title: 'Добро пожаловать',
-          to: '/',
+          title: "Main Page",
+          to: "/"
         },
         {
-          icon: 'mdi-menu',
-          title: 'Разделы',
-          to: '/sections',
+          title: "Inspection",
+          to: "/inspection"
         },
+        {
+          title: "Storage",
+          to: "/storage"
+        },
+        {
+          title: "Repair",
+          to: "/repair"
+        },
+        {
+          title: "Archive",
+          to: "/archive"
+        }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'KWANT',
+      title: "KWANT",
+      dialog: false
     }
   },
   computed: {
     currentUser() {
-      return this.$store.state.auth.user
+      return this.$store.state.user
     },
-    showAdminBoard() {
-      if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes('ROLE_ADMIN')
-      }
-
-      return false
-    },
-    showModeratorBoard() {
-      if (this.currentUser && this.currentUser.roles) {
-        return this.currentUser.roles.includes('ROLE_MODERATOR')
+    useAdminRules() {
+      if (this.currentUser && this.currentUser.role) {
+        return this.currentUser.role === "ROLE_ADMIN"
       }
       return false
-    },
+    }
   },
   beforeDestroy() {
-    EventBus.remove('logout')
+    EventBus.remove("logout")
   },
   mounted() {
-    EventBus.on('logout', () => {
+    EventBus.on("logout", () => {
       this.logOut()
     })
   },
   methods: {
     logOut() {
-      this.$store.dispatch('logout')
-      this.$router.push('/login')
-    },
-  },
+      this.$store.dispatch("logout")
+      this.$router.push("/login")
+    }
+  }
 }
 </script>
 

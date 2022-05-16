@@ -8,7 +8,7 @@ class AuthService {
         username,
         password,
       })
-      .then((response) => {
+      .then(response => {
         if (response.data.accessToken) {
           TokenService.setUser(response.data)
         }
@@ -19,6 +19,15 @@ class AuthService {
 
   logout() {
     TokenService.removeUser()
+  }
+
+  register(user) {
+    return api.post('/auth/signup', {
+      username: user.username,
+      password: user.password,
+      division: user.division,
+      role: user.role,
+    })
   }
 }
 

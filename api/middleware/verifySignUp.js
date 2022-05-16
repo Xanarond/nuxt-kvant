@@ -1,6 +1,7 @@
 const db = require('../models')
-const ROLES = db.ROLES
+
 const User = db.user
+const Role = db.role
 
 checkDuplicate = (req, res, next) => {
   // Username
@@ -8,7 +9,7 @@ checkDuplicate = (req, res, next) => {
     where: {
       username: req.body.username,
     },
-  }).then((user) => {
+  }).then(user => {
     if (user) {
       res.status(400).send({
         message: 'Failed! Username is already in use!',
@@ -20,17 +21,19 @@ checkDuplicate = (req, res, next) => {
 }
 
 checkRolesExisted = (req, res, next) => {
-  if (req.body.roles) {
-    for (let i = 0; i < req.body.roles.length; i++) {
-      if (!ROLES.includes(req.body.roles[i])) {
-        res.status(400).send({
-          message: 'Failed! Role does not exist = ' + req.body.roles[i],
-        })
-        return
-      }
+  Role.findOne({
+    where: {
+      name: req.body.role,
+    },
+  }).then(role => {
+    if (!role === req.body.role) {
+      res.status(400).send({
+        message: `Failed! Role does not exist = ${req.body.role}`,
+      })
+      return
     }
-  }
-  next()
+    next()
+  })
 }
 
 const verifySignUp = {

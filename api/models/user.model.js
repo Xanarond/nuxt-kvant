@@ -1,5 +1,5 @@
-module.exports = (sequelize, Sequelize) => {
-  return sequelize.define('users', {
+module.exports = (sequelize, Sequelize) =>
+  sequelize.define('users', {
     username: {
       type: Sequelize.STRING,
     },
@@ -9,5 +9,7 @@ module.exports = (sequelize, Sequelize) => {
     division: {
       type: Sequelize.STRING,
     },
+    role: {
+      type: Sequelize.STRING,
+    },
   })
-}
