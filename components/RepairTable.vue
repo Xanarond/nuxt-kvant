@@ -61,8 +61,8 @@
     <DxColumn :width="125" data-field="STATUS" />
     <DxColumn :width="170" data-field="RB BARCODE" />
     <DxColumn data-field="COMMENT" />
-    <DxColumn data-field="1st Insp DATE" data-type="date" format="dd.MM.yyyy" />
-    <DxColumn data-field="2nd Insp DATE" data-type="date" format="dd.MM.yyyy" />
+    <DxColumn data-field="1st Insp DATE" data-type="date" />
+    <DxColumn data-field="2nd Insp DATE" data-type="date" />
     <DxColumn data-field="Global Status" alignment="center" />
     <DxColumn data-field="Local Status" alignment="center" />
     <DxColumn data-field="BOX" alignment="center" />
@@ -98,7 +98,7 @@ import TableService from '@/services/table.service'
 import EventBus from '@/middleware/EventBus'
 
 export default {
-  name: 'InspectionTable',
+  name: 'RepairTable',
   components: {
     DxDataGrid,
     DxScrolling,
@@ -116,14 +116,13 @@ export default {
     DxPaging,
     DxPager
   },
-
   data: () => ({
     content: '',
     showFilterRow: true,
     showHeaderFilter: true,
   }),
   mounted () {
-    TableService.getInspectionTable().then(
+    TableService.getRepairTable().then(
       (response) => {
         this.content = response.data
       },
@@ -143,4 +142,4 @@ export default {
 }
 </script>
 
-<style scoped></style>
+  <style scoped />

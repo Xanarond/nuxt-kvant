@@ -35,16 +35,16 @@ module.exports = (sequelize, Sequelize) =>
       '2nd Insp TIME': {
         type: Sequelize.TIME,
       },
-      "Global Status": {
+      'Global Status': {
         type: Sequelize.STRING
       },
-      "Local Status": {
+      'Local Status': {
         type: Sequelize.STRING
       },
-      "BOX": {
+      BOX: {
         type: Sequelize.INTEGER
       },
-      "Location": {
+      Location: {
         type: Sequelize.STRING
       }
     },
@@ -54,5 +54,6 @@ module.exports = (sequelize, Sequelize) =>
       tableName: 'inspection',
       charset: 'utf8',
       collate: 'utf8_general_ci',
+      timestamps: false
     },
   )

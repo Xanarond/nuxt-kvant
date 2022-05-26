@@ -1,12 +1,12 @@
 <template>
   <v-container fluid>
-    <InspectionTable />
+    <RepairTable />
   </v-container>
 </template>
 
 <script>
 export default {
-  name: "RepairPage"
+  name: 'RepairPage'
 }
 </script>
 

@@ -2,10 +2,6 @@ module.exports = (sequelize, Sequelize) =>
   sequelize.define(
     'storage',
     {
-      'ID': {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-      },
       MATERIAL: {
         type: Sequelize.STRING,
       },
@@ -22,12 +18,6 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING,
       },
       STATUS: {
-        type: Sequelize.STRING,
-      },
-      BOX: {
-        type: Sequelize.INTEGER,
-      },
-      LOC: {
         type: Sequelize.STRING,
       },
       DESTINATION: {
@@ -51,6 +41,18 @@ module.exports = (sequelize, Sequelize) =>
       'Scrap DATE': {
         type: Sequelize.DATEONLY,
       },
+      'Global Status': {
+        type: Sequelize.STRING
+      },
+      'Local Status': {
+        type: Sequelize.STRING
+      },
+      BOX: {
+        type: Sequelize.INTEGER
+      },
+      Location: {
+        type: Sequelize.STRING
+      }
     },
     {
       underscored: false,
@@ -58,5 +60,6 @@ module.exports = (sequelize, Sequelize) =>
       tableName: 'storage',
       charset: 'utf8',
       collate: 'utf8_general_ci',
+      timestamps: false
     },
   )

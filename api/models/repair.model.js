@@ -2,10 +2,6 @@ module.exports = (sequelize, Sequelize) =>
   sequelize.define(
     'repair',
     {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-      },
       MATERIAL: {
         type: Sequelize.STRING,
       },
@@ -13,7 +9,7 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING,
       },
       'INCH (FACT)': {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       'SERIAL NUMBER': {
         type: Sequelize.STRING,
@@ -22,9 +18,6 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING,
       },
       STATUS: {
-        type: Sequelize.STRING,
-      },
-      LOC: {
         type: Sequelize.STRING,
       },
       'RB BARCODE': {
@@ -36,6 +29,18 @@ module.exports = (sequelize, Sequelize) =>
       'Repair DATE': {
         type: Sequelize.DATEONLY,
       },
+      'Global Status': {
+        type: Sequelize.STRING
+      },
+      'Local Status': {
+        type: Sequelize.STRING
+      },
+      BOX: {
+        type: Sequelize.INTEGER
+      },
+      Location: {
+        type: Sequelize.STRING
+      }
     },
     {
       underscored: false,
@@ -43,5 +48,6 @@ module.exports = (sequelize, Sequelize) =>
       tableName: 'repair',
       charset: 'utf8',
       collate: 'utf8_general_ci',
+      timestamps: false
     },
   )

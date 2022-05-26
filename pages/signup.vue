@@ -8,7 +8,8 @@
           :value="alert"
           color="green"
           type="info"
-        >{{ message }}
+        >
+          {{ message }}
         </v-alert>
         <v-alert
           v-else
@@ -16,10 +17,11 @@
           :value="alert"
           color="red"
           type="info"
-        >{{ message }}
+        >
+          {{ message }}
         </v-alert>
       </v-row>
-      <v-spacer v-else class="pb-12"></v-spacer>
+      <v-spacer v-else class="pb-12" />
       <form method="post" @submit.prevent="handleRegister">
         <v-card class="mx-auto card" max-width="500">
           <v-card-title class="headline justify-center">
@@ -30,7 +32,7 @@
               <v-img
                 src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
                 class="login_img"
-              ></v-img>
+              />
             </v-col>
           </v-row>
           <v-row>
@@ -39,7 +41,7 @@
               label="Username"
               :rules="username_rules"
               hide-details="auto"
-            ></v-text-field>
+            />
           </v-row>
           <v-row>
             <!--            :rules="[password_rules.password]"-->
@@ -52,14 +54,14 @@
               :type="value ? 'password' : 'text'"
               @click:append="() => (value = !value)"
               @input="_ => (user.password = _)"
-            ></v-text-field>
+            />
           </v-row>
           <v-row>
             <v-select
               v-model="user.role"
               :items="['admin', 'worker']"
               label="User Role"
-            ></v-select>
+            />
           </v-row>
           <v-row>
             <v-select
@@ -68,19 +70,26 @@
               :rules="div_rules"
               :items="['Inspection', 'Repair', 'Storage', 'Archive']"
               label="Division"
-            ></v-select>
+            />
           </v-row>
           <v-row justify="center">
             <v-btn
               v-if="!user.username || !user.password || !user.role || (user.role === 'worker' && !user.division)"
               disabled
-              block color="primary" type="submit"
-              @click="alert = true">
+              block
+              color="primary"
+              type="submit"
+              @click="alert = true"
+            >
               Add user
             </v-btn>
             <v-btn
-              v-else block color="primary"
-              type="submit" @click="alert = true">
+              v-else
+              block
+              color="primary"
+              type="submit"
+              @click="alert = true"
+            >
               Add user
             </v-btn>
           </v-row>
@@ -91,45 +100,45 @@
 </template>
 
 <script>
-import User from "@/models/user"
+import User from '@/models/user'
 
 export default {
-  name: "SignupPage",
-  data() {
+  name: 'SignupPage',
+  data () {
     return {
-      user: new User("", "", "", ""),
+      user: new User('', '', '', ''),
       submitted: false,
       successful: false,
       loading: false,
       valid: true,
       value: true,
       alert: false,
-      message: "",
+      message: '',
       username_rules: [
-        value => !!value || "Username Required.",
-        value => (value && value.length >= 3) || "Min 3 characters",
-        value => value.length < 20 || "Username is too long!"
+        value => !!value || 'Username Required.',
+        value => (value && value.length >= 3) || 'Min 3 characters',
+        value => value.length < 20 || 'Username is too long!'
       ],
       div_rules: [
-        value => !!value || "Division Required."
+        value => !!value || 'Division Required.'
       ]
     }
   },
 
-  mounted() {
+  mounted () {
     this.hideAlert()
   },
 
   methods: {
-    handleRegister() {
-      this.message = ""
+    handleRegister () {
+      this.message = ''
       this.submitted = true
-      this.$store.dispatch("register", this.user).then(
-        data => {
+      this.$store.dispatch('register', this.user).then(
+        (data) => {
           this.message = data.message
           this.successful = true
         },
-        error => {
+        (error) => {
           this.message =
             (error.response &&
               error.response.data &&
@@ -140,7 +149,7 @@ export default {
         }
       )
     },
-    hideAlert() {
+    hideAlert () {
       window.setInterval(() => {
         this.alert = false
       }, 7000)

@@ -13,23 +13,23 @@ exports.signup = (req, res) => {
     password: bcrypt.hashSync(req.body.password, 8),
     role: req.body.role,
   })
-    .then(user => {
+    .then((user) => {
       if (req.body.role) {
         Role.findOne({
           where: {
             name: req.body.role,
           },
-        }).then(roles => {
+        }).then((roles) => {
           user.setRoles(roles).then(() => {
             res.send({ message: 'User registered successfully!' })
           })
         })
       }
-      if(!req.body.username){
+      if (!req.body.username) {
         res.send({ message: 'User name is not empty' })
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({ message: err.message })
     })
 }
@@ -40,7 +40,7 @@ exports.signin = (req, res) => {
       username: req.body.username,
     },
   })
-    .then(async user => {
+    .then(async (user) => {
       if (!user) {
         return res.status(404).send({ message: 'User Not found.' })
       }
@@ -63,7 +63,7 @@ exports.signin = (req, res) => {
 
       const refreshToken = await RefreshToken.createToken(user)
 
-      user.getRoles().then(roles => {
+      user.getRoles().then((roles) => {
         let authority
         for (let i = 0; i < roles.length; i++) {
           authority = `ROLE_${roles[i].name.toUpperCase()}`
@@ -79,7 +79,7 @@ exports.signin = (req, res) => {
         })
       })
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({ message: err.message })
     })
 }

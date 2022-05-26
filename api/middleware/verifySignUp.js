@@ -9,7 +9,7 @@ checkDuplicate = (req, res, next) => {
     where: {
       username: req.body.username,
     },
-  }).then(user => {
+  }).then((user) => {
     if (user) {
       res.status(400).send({
         message: 'Failed! Username is already in use!',
@@ -25,7 +25,7 @@ checkRolesExisted = (req, res, next) => {
     where: {
       name: req.body.role,
     },
-  }).then(role => {
+  }).then((role) => {
     if (!role === req.body.role) {
       res.status(400).send({
         message: `Failed! Role does not exist = ${req.body.role}`,

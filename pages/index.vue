@@ -1,5 +1,7 @@
 <template>
-  <MainTable />
+  <v-container fluid>
+    <MainTable />
+  </v-container>
 </template>
 
 <script>

@@ -3,26 +3,48 @@
     <v-row v-if="alert" justify="end">
       <v-alert
         v-if="message"
+        v-model="alert"
         transition="fade-transition"
-        :value="alert"
         color="green"
         type="info"
-      >{{ message }}
+      >
+        {{ message }}
       </v-alert>
     </v-row>
-    <form ref="fileform" class="fileform" @dragenter="alert = true">
+    <!--    <v-row justify="center">
+      <v-col cols="3">
+        <v-file-input
+          v-model="file"
+          show-size
+          label="File input"
+          @change="uploadFile"
+        />
+      </v-col>
+    </v-row>-->
+    <!--    <form ref="fileform" class="fileform" @dragenter="alert = true">
       <span class="drop-files">Drop the Panels file here...</span>
-    </form>
-    <v-row class="pt-4 justify-center">
-      <p>Название файла: {{ file.name }}</p>
+    </form>-->
+    <v-row justify="center" class="pt-4">
+      <v-col cols="4">
+        <p>Название файла: {{ file }}</p><br>
+        <p>Дата создания: {{ create_date }}</p>
+      </v-col>
     </v-row>
     <v-row justify="center">
+      <v-col cols="4">
+        <p>Дата изменения файла: {{ modified_date }}</p>
+        <br>
+        <p>Дата доступа к файлу: {{ access_date }}</p>
+      </v-col>
+    </v-row>
+    <v-row justify="center" class="pt-2">
       <v-btn
         v-if="file === ''"
         disabled
         color="primary"
         elevation="2"
-        large>
+        large
+      >
         Submit to DB
       </v-btn>
       <v-btn
@@ -30,50 +52,77 @@
         color="primary"
         elevation="2"
         large
-        @click="submitFile(result)"
-      >Submit to DB
+        @click="submitFile"
+        @loadeddata="alert = true"
+      >
+        Submit to DB
       </v-btn>
     </v-row>
   </div>
 </template>
 
 <script>
-import * as XLSX from "xlsx"
-import TableService from "@/services/table.service"
+// import * as fs from 'fs';
+// import * as XLSX from "xlsx"
+import moment from 'moment'
+import TableService from '@/services/table.service'
 
 export default {
-  name: "AppendPage",
-  data() {
+  name: 'AppendPage',
+  data () {
     return {
       drag: false,
-      file: "",
-      message: "",
+      file: [],
+      message: '',
       alert: false,
-      result: []
+      result: [],
+      data_string: '',
+      create_date: '',
+      modified_date: '',
+      access_date: ''
     }
   },
-  mounted() {
-    this.dragAndDropCapable()
+  created () {
+  },
+  mounted () {
+    // this.dragAndDropCapable()
+    TableService.getFileInfo().then((res) => {
+      console.log(res.data)
+      this.file = res.data.File_description
+      this.create_date = moment(res.data.Create_timestamp).add(3, 'hours').utc().format('DD.MM.YYYY HH:mm:ss')
+      this.modified_date = moment(res.data['Last modified timestamp']).add(3, 'hours').utc().format('DD.MM.YYYY HH:mm:ss')
+      this.access_date = moment(res.data['Last access timestamp']).add(3, 'hours').utc().format('DD.MM.YYYY HH:mm:ss')
+    })
   },
   methods: {
-    dragAndDropCapable() {
+    /*  uploadFile () {
+      // XLSX.set_fs(fs);
+      console.log(process.cwd())
+      console.log(this.file)
+      const file = this.file
+      const formData = new FormData()
+      formData.append('Panels', file)
+      return formData
+    }, */
+    /* dragAndDropCapable () {
       this.drag = this.determineDragAndDropCapable()
       if (this.drag) {
-        ["drag", "dragstart", "dragend", "dragover", "dragenter", "dragleave", "drop"].forEach(function(event) {
-          this.$refs.fileform.addEventListener(event, e => {
+        ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach(function (event) {
+          this.$refs.fileform.addEventListener(event, (e) => {
             e.preventDefault()
             e.stopPropagation()
           }, false)
         }.bind(this))
-        this.$refs.fileform.addEventListener("drop", function(e) {
+        this.$refs.fileform.addEventListener('drop', function (e) {
           this.file = e.dataTransfer.files[0]
           console.log(this.file)
           const reader = new FileReader()
-          reader.onload = e => {
-            const data = e.target.result
-            const workbook = XLSX.read(data, { type: "binary", cellDates: true })
-            /*  const filename = 'Panels_copy.xlsm'
-             XLSX.writeFile(workbook, filename); */
+          reader.onload = (e) => {
+            this.data_string = e.target.result
+            return this.data_string
+            /!* const workbook = XLSX.read(data, { type: "binary", cellDates: true })
+            /!*  const filename = 'Panels_copy.xlsm'
+             XLSX.writeFile(workbook, filename); *!/
             const workSheet = workbook.Sheets.DATA
             const Excel_copy = XLSX.utils.sheet_to_json(workSheet)
             const result = []
@@ -102,29 +151,33 @@ export default {
               result.push(obj)
             })
             this.result = []
-            return this.result.push(result)
+            return this.result.push(result) *!/
           }
-          reader.readAsArrayBuffer(this.file)
+          reader.readAsDataURL(this.file)
         }.bind(this))
       }
+    }, */
+    determineDragAndDropCapable () {
+      const div = document.createElement('div')
+      return (('draggable' in div) ||
+          ('ondragstart' in div && 'ondrop' in div)) &&
+        'FormData' in window &&
+        'FileReader' in window
     },
-    determineDragAndDropCapable() {
-      const div = document.createElement("div")
-      return (("draggable" in div)
-          || ("ondragstart" in div && "ondrop" in div))
-        && "FormData" in window
-        && "FileReader" in window
-    },
-    submitFile(data) {
-      const dataSet = new Set(data[0])
-      const filterArr = [...dataSet]
-      TableService.postDataTable(filterArr)
-      this.message = "Данные успешно добавлены"
+    submitFile () {
+      /* const dataSet = new Set(data[0])
+      const filterArr = [...dataSet] */
+      const user = this.$store.state.user
+      TableService.postDataTable(user).then((res) => {
+        this.alert = true
+        this.message = res.body
+      })
+      this.message = 'Данные успешно добавлены'
       window.setTimeout(() => {
         this.alert = false
-        this.message = ""
-        this.file = ""
-        this.result = ""
+        this.message = ''
+        this.file = []
+        this.result = ''
         // this.$router.push("/")
       }, 4000)
     }

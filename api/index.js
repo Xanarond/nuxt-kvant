@@ -1,23 +1,24 @@
 // const fs = require("fs");
 // const https = require("https");
-const express = require("express")
-const bcrypt = require("bcryptjs")
+const express = require('express')
+const bcrypt = require('bcryptjs')
 // const vhost = require('vhost')
-const cors = require("cors")
-const bodyParser = require("body-parser")
+const cors = require('cors')
+const bodyParser = require('body-parser')
 
 const app = express()
-app.use(bodyParser.json({ limit: "50mb" })) // конфиг для пропуска больших данных
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
+app.use(bodyParser.text({ limit: '50mb', defaultCharset: 'utf-8' }))
+app.use(bodyParser.json({ limit: '50mb' })) // конфиг для пропуска больших данных
+// app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
 
 const corsOptions = {
-  origin: "*",
+  origin: '*',
   optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions))
 
-require("../api/routes/main.routes")(app)
-const db = require("../api/models/index")
+require('../api/routes/main.routes')(app)
+const db = require('../api/models/index')
 
 /* const httpsOptions = {
   key: fs.readFileSync("./ssl/index.key"), // путь к ключу
@@ -37,28 +38,28 @@ db.sequelize.sync({ force: true })
     initial()
   })
 
-function initial() {
+function initial () {
   Role.bulkCreate([
     {
       id: 1,
-      name: "admin"
+      name: 'admin'
     },
     {
       id: 2,
-      name: "worker"
+      name: 'worker'
     }
   ]).then(
     User.create({
-      username: "admin",
-      division: "",
-      password: bcrypt.hashSync("123", 8),
-      role: "admin"
-    }).then(user => {
+      username: 'admin',
+      division: '',
+      password: bcrypt.hashSync('123', 8),
+      role: 'admin'
+    }).then((user) => {
       Role.findOne({
         where: {
-          name: "admin"
+          name: 'admin'
         }
-      }).then(roles => {
+      }).then((roles) => {
         user.setRoles(roles)
       })
     }))

@@ -1,31 +1,31 @@
 class TokenService {
-  getLocalRefreshToken() {
+  getLocalRefreshToken () {
     const user = JSON.parse(localStorage.getItem('user'))
     return user?.refreshToken
   }
 
-  getLocalAccessToken() {
+  getLocalAccessToken () {
     const user = JSON.parse(localStorage.getItem('user'))
     return user?.accessToken
   }
 
-  updateLocalAccessToken(token) {
+  updateLocalAccessToken (token) {
     const user = JSON.parse(localStorage.getItem('user'))
     user.accessToken = token
     localStorage.setItem('user', JSON.stringify(user))
   }
 
-  getUser() {
+  getUser () {
     return JSON.parse(localStorage.getItem('user'))
   }
 
-  setUser(user) {
+  setUser (user) {
     // eslint-disable-next-line no-console
     console.log(JSON.stringify(user))
     localStorage.setItem('user', JSON.stringify(user))
   }
 
-  removeUser() {
+  removeUser () {
     localStorage.removeItem('user')
   }
 }

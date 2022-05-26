@@ -7,10 +7,11 @@
         :value="alert"
         color="red"
         type="warning"
-        >{{ message }}
+      >
+        {{ message }}
       </v-alert>
     </v-row>
-    <v-spacer v-else class="pb-12"></v-spacer>
+    <v-spacer v-else class="pb-12" />
     <form id="app" method="post" @submit.prevent="handleLogin">
       <v-card class="mx-auto card" max-width="500">
         <v-card-title class="headline justify-center">
@@ -21,7 +22,7 @@
             <v-img
               src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
               class="login_img"
-            ></v-img>
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -30,7 +31,7 @@
             label="Username"
             :rules="rules"
             hide-details="auto"
-          ></v-text-field>
+          />
         </v-row>
         <v-row>
           <!-- :rules="[password_rules.required, password_rules.password]""-->
@@ -43,10 +44,17 @@
             :type="value ? 'password' : 'text'"
             @click:append="() => (value = !value)"
             @input="_ => (user.password = _)"
-          ></v-text-field>
+          />
         </v-row>
         <v-row justify="center">
-          <v-btn v-if="user.username === '' || user.password === ''" block color="primary" disabled type="submit" @click="alert = true">
+          <v-btn
+            v-if="user.username === '' || user.password === ''"
+            block
+            color="primary"
+            disabled
+            type="submit"
+            @click="alert = true"
+          >
             Login
           </v-btn>
           <v-btn v-else block color="primary" type="submit" @click="alert = true">
@@ -76,7 +84,7 @@ export default {
     message: '',
     password_rules: {
       required: value => !!value || 'Required.',
-      password: value => {
+      password: (value) => {
         const pattern =
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})/
         return (
@@ -87,20 +95,20 @@ export default {
     },
   }),
   computed: {
-    loggedIn() {
+    loggedIn () {
       return this.$store.state.status.loggedIn
     },
   },
-  created() {
+  created () {
     if (this.loggedIn) {
       this.$router.push('/')
     }
   },
-  mounted() {
+  mounted () {
     this.hideAlert()
   },
   methods: {
-    handleLogin() {
+    handleLogin () {
       JSON.parse(localStorage.getItem('user'))
       if (this.user.username && this.user.password) {
         this.loading = true
@@ -108,7 +116,7 @@ export default {
           () => {
             this.$router.push('/')
           },
-          error => {
+          (error) => {
             this.loading = false
             this.message =
               (error.response &&
@@ -120,7 +128,7 @@ export default {
         )
       }
     },
-    hideAlert() {
+    hideAlert () {
       window.setInterval(() => {
         this.alert = false
       }, 7000)
