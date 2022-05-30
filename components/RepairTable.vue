@@ -138,7 +138,25 @@ export default {
         }
       },
     )
+    this.$nuxt.$on('updatetable', () => {
+      TableService.getRepairTable().then(
+        (response) => {
+          this.content = response.data
+        },
+        (error) => {
+          this.content =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString()
+        }
+      )
+    })
   },
+  beforeDestroy () {
+    this.$nuxt.$off('updatetable')
+  }
 }
 </script>
 

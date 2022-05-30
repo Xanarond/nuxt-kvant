@@ -1,63 +1,68 @@
 <template>
   <div id="file-drag-drop">
-    <v-row v-if="alert" justify="end">
-      <v-alert
-        v-if="message"
-        v-model="alert"
-        transition="fade-transition"
-        color="green"
-        type="info"
-      >
-        {{ message }}
-      </v-alert>
-    </v-row>
-    <!--    <v-row justify="center">
-      <v-col cols="3">
-        <v-file-input
-          v-model="file"
-          show-size
-          label="File input"
-          @change="uploadFile"
-        />
-      </v-col>
-    </v-row>-->
-    <!--    <form ref="fileform" class="fileform" @dragenter="alert = true">
-      <span class="drop-files">Drop the Panels file here...</span>
-    </form>-->
-    <v-row justify="center" class="pt-4">
-      <v-col cols="4">
-        <p>Название файла: {{ file }}</p><br>
-        <p>Дата создания: {{ create_date }}</p>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="4">
-        <p>Дата изменения файла: {{ modified_date }}</p>
-        <br>
-        <p>Дата доступа к файлу: {{ access_date }}</p>
-      </v-col>
-    </v-row>
-    <v-row justify="center" class="pt-2">
-      <v-btn
-        v-if="file === ''"
-        disabled
-        color="primary"
-        elevation="2"
-        large
-      >
-        Submit to DB
-      </v-btn>
-      <v-btn
-        v-if="file !== '' "
-        color="primary"
-        elevation="2"
-        large
-        @click="submitFile"
-        @loadeddata="alert = true"
-      >
-        Submit to DB
-      </v-btn>
-    </v-row>
+    <div v-if="loading">
+      <LoadingScreen />
+    </div>
+    <div v-else>
+      <v-row v-if="alert" justify="end" class="pt-2">
+        <v-alert
+          v-if="message"
+          v-model="alert"
+          transition="fade-transition"
+          color="green"
+          type="info"
+        >
+          {{ message }}
+        </v-alert>
+      </v-row>
+      <!--    <v-row justify="center">
+        <v-col cols="3">
+          <v-file-input
+            v-model="file"
+            show-size
+            label="File input"
+            @change="uploadFile"
+          />
+        </v-col>
+      </v-row>-->
+      <!--    <form ref="fileform" class="fileform" @dragenter="alert = true">
+        <span class="drop-files">Drop the Panels file here...</span>
+      </form>-->
+      <v-row justify="center" class="pt-4">
+        <v-col cols="4">
+          <p>Название файла: {{ file }}</p><br>
+          <p>Дата создания: {{ create_date }}</p>
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col cols="4">
+          <p>Дата изменения файла: {{ modified_date }}</p>
+          <br>
+          <p>Дата доступа к файлу: {{ access_date }}</p>
+        </v-col>
+      </v-row>
+      <v-row justify="center" class="pt-2">
+        <v-btn
+          v-if="file === ''"
+          disabled
+          color="primary"
+          elevation="2"
+          large
+        >
+          Submit to DB
+        </v-btn>
+        <v-btn
+          v-if="file !== '' "
+          color="primary"
+          elevation="2"
+          large
+          @click="submitFile"
+          @loadeddata="alert = true"
+        >
+          Submit to DB
+        </v-btn>
+      </v-row>
+    </div>
   </div>
 </template>
 
@@ -65,10 +70,12 @@
 // import * as fs from 'fs';
 // import * as XLSX from "xlsx"
 import moment from 'moment'
+import LoadingScreen from '../components/LoadingScreen'
 import TableService from '@/services/table.service'
 
 export default {
   name: 'AppendPage',
+  components: { LoadingScreen },
   data () {
     return {
       drag: false,
@@ -79,19 +86,22 @@ export default {
       data_string: '',
       create_date: '',
       modified_date: '',
-      access_date: ''
+      access_date: '',
+      loading: false,
     }
   },
   created () {
   },
   mounted () {
     // this.dragAndDropCapable()
+    this.loading = true
     TableService.getFileInfo().then((res) => {
       console.log(res.data)
       this.file = res.data.File_description
       this.create_date = moment(res.data.Create_timestamp).add(3, 'hours').utc().format('DD.MM.YYYY HH:mm:ss')
       this.modified_date = moment(res.data['Last modified timestamp']).add(3, 'hours').utc().format('DD.MM.YYYY HH:mm:ss')
       this.access_date = moment(res.data['Last access timestamp']).add(3, 'hours').utc().format('DD.MM.YYYY HH:mm:ss')
+      this.loading = false
     })
   },
   methods: {
@@ -170,7 +180,8 @@ export default {
       const user = this.$store.state.user
       TableService.postDataTable(user).then((res) => {
         this.alert = true
-        this.message = res.body
+        const info = res.body.message
+        this.message = info
       })
       this.message = 'Данные успешно добавлены'
       window.setTimeout(() => {
@@ -178,7 +189,9 @@ export default {
         this.message = ''
         this.file = []
         this.result = ''
-        // this.$router.push("/")
+        if (this.$route.url) {
+          this.$router.push('/')
+        }
       }, 4000)
     }
   }

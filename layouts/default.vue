@@ -1,32 +1,13 @@
 <template>
   <v-app>
-    <!--    <v-navigation-drawer
-          v-model="drawer"
-          :mini-variant="miniVariant"
-          :clipped="clipped"
-          fixed
-          app
-        >
-          <v-list>
-            <v-list-item
-              v-for="(item, i) in items"
-              :key="i"
-              :to="item.to"
-              router
-              exact
-            >
-              <v-list-item-action>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-navigation-drawer>-->
-    <v-main>
+    <v-main class="mt-10">
       <v-container fluid>
-        <Nuxt />
+        <div v-show="loading">
+          <LoadingScreen />
+        </div>
+        <div v-if="!loading">
+          <Nuxt />
+        </div>
       </v-container>
     </v-main>
     <v-app-bar
@@ -52,10 +33,6 @@
       </v-btn>
     </v-app-bar>
     <v-app-bar v-else dense :clipped-left="clipped" fixed app>
-      <!--      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />-->
-      <!--      <v-btn icon @click.stop="miniVariant = !miniVariant">-->
-      <!--        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>-->
-      <!--      </v-btn>-->
       <v-toolbar-title v-text="title" />
       <v-spacer />
 
@@ -202,14 +179,17 @@
 </template>
 
 <script>
+import LoadingScreen from '../components/LoadingScreen'
 import EventBus from '@/middleware/EventBus'
 
 export default {
   name: 'NavDrawer',
+  components: { LoadingScreen },
   data () {
     return {
       clipped: false,
       drawer: false,
+      loading: true,
       items: [
         {
           title: 'Main Page',
@@ -257,8 +237,24 @@ export default {
     EventBus.on('logout', () => {
       this.logOut()
     })
+    // setTimeout(() => (this.loading = true), 3000)
+    /* this.$nuxt.$on('updating', () => {
+      this.loading = false
+    }) */
+    this.startTimer()
   },
   methods: {
+    stopTimer () {
+      if (this.interval) {
+        window.clearInterval(this.interval)
+      }
+    },
+    startTimer () {
+      this.stopTimer()
+      this.interval = window.setInterval(() => {
+        this.loading = false
+      }, 3000)
+    },
     logOut () {
       this.$store.dispatch('logout')
       this.$router.push('/login')
@@ -270,5 +266,8 @@ export default {
 <style>
 html {
   overflow-y: auto;
+}
+.v-main {
+  padding: 0 !important;
 }
 </style>

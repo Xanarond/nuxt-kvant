@@ -139,7 +139,26 @@ export default {
         }
       },
     )
+    this.$nuxt.$on('updatetable', () => {
+      TableService.getInspectionTable().then(
+        (response) => {
+          this.content = response.data
+        },
+        (error) => {
+          this.content =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString()
+        }
+      )
+      this.$nuxt.$emit('updating')
+    })
   },
+  beforeDestroy () {
+    this.$nuxt.$off('updatetable')
+  }
 }
 </script>
 

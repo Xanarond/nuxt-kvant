@@ -12,7 +12,7 @@
           {{ message }}
         </v-alert>
         <v-alert
-          v-else
+          v-if="message && !successful"
           transition="fade-transition"
           :value="alert"
           color="red"
