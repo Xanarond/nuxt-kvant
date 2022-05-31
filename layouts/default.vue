@@ -1,14 +1,12 @@
 <template>
   <v-app>
     <v-main class="mt-10">
-      <v-container fluid>
-        <div v-show="loading">
-          <LoadingScreen />
-        </div>
-        <div v-if="!loading">
-          <Nuxt />
-        </div>
-      </v-container>
+      <div v-show="loading">
+        <LoadingScreen />
+      </div>
+      <div v-if="!loading">
+        <Nuxt />
+      </div>
     </v-main>
     <v-app-bar
       v-if="!$store.state.user"
@@ -26,7 +24,7 @@
         to="/"
         style="margin-right: 10px"
       >
-        Главная
+        Mainpage
       </v-btn>
       <v-btn color="primary" nuxt to="/login">
         Login
@@ -237,10 +235,6 @@ export default {
     EventBus.on('logout', () => {
       this.logOut()
     })
-    // setTimeout(() => (this.loading = true), 3000)
-    /* this.$nuxt.$on('updating', () => {
-      this.loading = false
-    }) */
     this.startTimer()
   },
   methods: {
@@ -267,7 +261,7 @@ export default {
 html {
   overflow-y: auto;
 }
-.v-main {
-  padding: 0 !important;
-}
+/*.v-main {
+  padding: 0px 0px 36px !important;
+}*/
 </style>

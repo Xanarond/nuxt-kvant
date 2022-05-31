@@ -16,9 +16,11 @@
 
 <script>
 import UpdateButton from '../components/UpdateButton'
+import RepairTable from '../components/RepairTable'
+import LoadingScreen from '../components/LoadingScreen'
 export default {
   name: 'RepairPage',
-  components: { UpdateButton },
+  components: { UpdateButton, RepairTable, LoadingScreen },
   data () {
     return {
       loading: true
@@ -37,7 +39,7 @@ export default {
       this.stopTimer()
       this.interval = window.setInterval(() => {
         this.loading = false
-      }, 3200)
+      }, 2200)
     }
   }
 }

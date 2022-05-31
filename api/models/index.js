@@ -27,6 +27,7 @@ db.inspection = require('./inspection.model')(sequelize, Sequelize)
 db.repair = require('./repair.model')(sequelize, Sequelize)
 db.storage = require('./storage.model')(sequelize, Sequelize)
 db.total = require('./total_kwant')(sequelize, Sequelize)
+db.archive = require('./archive.model')(sequelize, Sequelize)
 
 db.role.belongsToMany(db.user, {
   through: 'user_roles',

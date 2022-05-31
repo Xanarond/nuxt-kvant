@@ -1,21 +1,33 @@
 import api from './api'
 
 class TableService {
+  /**
+   * Метод возвращает данные для таблицы главной страницы
+   * @returns {Promise<AxiosResponse<any>>}
+   */
   getPublicContent () {
     return api.get('tables/main')
   }
 
+  /**
+   * Метод возвращает данные для таблицы раздела инспекции
+   * @returns {Promise<AxiosResponse<any>>}
+   */
   getInspectionTable () {
     return api.get('tables/inspection')
   }
 
+  /**
+   * Метод возвращает данные для таблицы ремонта
+   * @returns {Promise<AxiosResponse<[]>>}
+   */
   getRepairTable () {
     return api.get('tables/repair')
   }
 
   /**
    * Метод для передачи информации на сервер об изменении SU
-   * @param {[]} nums номера su
+   * @param {[number]} nums номера su
    * @param {string} gs глобальный статус
    * @param {string} ls локальный статус
    * @param loc {string} Location
@@ -33,6 +45,10 @@ class TableService {
     })
   }
 
+  /**
+   * Метод возвращает информацию по текущему файлу для импорта
+   * @returns {Promise<AxiosResponse<any>>}
+   */
   getFileInfo () {
     return api.get('/file_info')
   }

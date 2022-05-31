@@ -13,6 +13,12 @@
       :allow-header-filtering="true"
     />
     <DxPaging :enabled="false" />
+    <DxExport :enabled="true" :allow-export-selected-data="true" />
+    <DxFilterRow
+      :visible="showFilterRow"
+      alignment="center"
+    />
+    <DxSelection mode="multiple" />
     <DxEditing
       :allow-updating="true"
       :allow-adding="false"
@@ -33,6 +39,7 @@
           <DxItem data-field="SERIAL NUMBER" />
           <DxItem data-field="SU" />
           <DxItem data-field="BOX" />
+          <DxItem data-field="Location" />
           <DxItem data-field="RB BARCODE" />
           <DxItem
             :col-span="2"
@@ -58,7 +65,6 @@
     <DxColumn data-field="INCH (FACT)" />
     <DxColumn :width="180" data-field="SERIAL NUMBER" />
     <DxColumn :width="170" data-field="SU" />
-    <DxColumn :width="125" data-field="STATUS" />
     <DxColumn :width="170" data-field="RB BARCODE" />
     <DxColumn data-field="COMMENT" />
     <DxColumn data-field="1st Insp DATE" data-type="date" format="dd.MM.yyyy" />
@@ -67,6 +73,7 @@
     <DxColumn data-field="Local Status" alignment="center" />
     <DxColumn data-field="BOX" alignment="center" />
     <DxColumn data-field="Location" alignment="center" />
+    <DxColumn data-field="Responsible" alignment="center" />
     <DxScrolling
       column-rendering-mode="virtual"
       row-rendering-mode="infinite"
@@ -76,6 +83,8 @@
       :show-page-size-selector="true"
       :allowed-page-sizes="[10, 20, 50, 100, 250, 500]"
     />
+    <DxSearchPanel :visible="true" placeholder="Search..." />
+    <DxScrolling column-rendering-mode="virtual" row-rendering-mode="infinite" />
   </DxDataGrid>
 </template>
 
@@ -90,7 +99,7 @@ import {
   DxHeaderFilter, DxPager,
   DxPaging,
   DxPopup,
-  DxScrolling
+  DxScrolling, DxSelection, DxSearchPanel
 } from 'devextreme-vue/data-grid'
 import { DxTextArea } from 'devextreme-vue/text-area'
 import { DxItem } from 'devextreme-vue/form'
@@ -107,14 +116,15 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     DxTextArea,
     DxHeaderFilter,
-    // eslint-disable-next-line vue/no-unused-components
     DxFilterRow,
     DxEditing,
     DxPopup,
     DxForm,
     DxItem,
     DxPaging,
-    DxPager
+    DxPager,
+    DxSelection,
+    DxSearchPanel
   },
 
   data: () => ({
@@ -151,7 +161,10 @@ export default {
               error.response.data.message) ||
             error.message ||
             error.toString()
-        }
+          if (error.response && error.response.status === 403) {
+            EventBus.dispatch('logout')
+          }
+        },
       )
       this.$nuxt.$emit('updating')
     })

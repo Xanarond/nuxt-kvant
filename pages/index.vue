@@ -17,9 +17,10 @@
 <script>
 import UpdateButton from '../components/UpdateButton'
 import LoadingScreen from '../components/LoadingScreen'
+import MainTable from '../components/MainTable'
 export default {
   name: 'IndexPage',
-  components: { LoadingScreen, UpdateButton },
+  components: { MainTable, LoadingScreen, UpdateButton },
   data () {
     return {
       loading: true
@@ -38,7 +39,7 @@ export default {
       this.stopTimer()
       this.interval = window.setInterval(() => {
         this.loading = false
-      }, 3200)
+      }, 2200)
     }
   }
 }

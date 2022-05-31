@@ -1,13 +1,14 @@
+import TableMutation from '../mutations/tableMutation'
 const fs = require('fs')
 const { Client } = require('pg')
 const XLSX = require('xlsx')
 const moment = require('moment')
 const env = require('../config/db.config')
 const db = require('../models')
-const FILE_PATHNAME = 'C:/Users/Vlad/Desktop/Panels_statuses.xlsb'
+const FILE_PATHNAME = '//106.109.32.200/Logistic/pmakhotkin/Task_list/KWANTDB/Данные для импорта/Panels_test.xlsb'
 // FILE_PATHNAME = '//106.109.32.200/Logistic/pmakhotkin/Task_list/KWANTDB/Данные для импорта/Panels_test.xlsb'
 
-const { total: Total, inspection: Inspection, storage: Storage, repair: Repair } = db
+const { total: Total, inspection: Inspection, storage: Storage, repair: Repair, archive: Archive } = db
 
 const conn = `postgres://${env.USER}:${env.PASSWORD}@${env.HOST}/${env.DB}` // connection config
 const client = new Client({
@@ -175,19 +176,7 @@ exports.postDataSet = (req, res) => {
     }
     return result.push(obj)
   })
-  // console.log(req.body)
-  Total.bulkCreate(result, {
-    updateOnDuplicate: ['id', 'MATERIAL', 'CLAIM', 'INCH (FACT)', 'SERIAL NUMBER', 'SU', 'DESTINATION', 'CODE', 'RB BARCODE', 'COMMENT', 'Upload DATE', '1st Insp DATE', '2nd Insp DATE', 'Putaway DATE', 'Outbound DATE', 'Scrap DATE', 'Global Status', 'Local Status', 'BOX', 'Location']
-  })
-    .then((result) => {
-      console.log(result)
-    })
-  console.log(result)
-  Inspection.bulkCreate(result, {
-    updateOnDuplicate: ['id', 'Global Status', 'Local Status', 'BOX', 'Location']
-  })
-    .then((result) => {
-      console.log(result)
-    })
+  const table_inst = new TableMutation()
+  table_inst.initialRows(result)
   res.send({ message: 'Данные добавлены!' })
 }

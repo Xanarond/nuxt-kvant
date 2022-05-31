@@ -1,33 +1,54 @@
 module.exports = (sequelize, Sequelize) =>
   sequelize.define(
-    'repair',
+    'archive',
     {
       MATERIAL: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       CLAIM: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       'INCH (FACT)': {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       'SERIAL NUMBER': {
         type: Sequelize.STRING,
       },
       SU: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER
       },
-      STATUS: {
-        type: Sequelize.STRING,
+      DESTINATION: {
+        type: Sequelize.STRING
+      },
+      CODE: {
+        type: Sequelize.INTEGER
       },
       'RB BARCODE': {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING
       },
       COMMENT: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING
       },
-      'Repair DATE': {
+      'Upload DATE': {
+        type: Sequelize.DATEONLY
+      },
+      '1st Insp DATE': {
         type: Sequelize.DATEONLY,
+      },
+      '2nd Insp DATE': {
+        type: Sequelize.DATEONLY
+      },
+      '2nd Insp TIME': {
+        type: Sequelize.TIME
+      },
+      'Putaway DATE': {
+        type: Sequelize.DATEONLY
+      },
+      'Outbound DATE': {
+        type: Sequelize.DATEONLY
+      },
+      'Scrap DATE': {
+        type: Sequelize.DATEONLY
       },
       'Global Status': {
         type: Sequelize.STRING
@@ -48,9 +69,9 @@ module.exports = (sequelize, Sequelize) =>
     {
       underscored: false,
       freezeTableName: true,
-      tableName: 'repair',
+      tableName: 'archive',
       charset: 'utf8',
       collate: 'utf8_general_ci',
       timestamps: false
-    },
+    }
   )

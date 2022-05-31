@@ -1,9 +1,7 @@
 <template>
-  <v-container fluid>
-    <v-row class="pt-16 pe-4 ps-4">
-      <v-progress-linear height="25" color="primary accent-4" indeterminate rounded />
-    </v-row>
-  </v-container>
+  <v-row class="pt-15 pe-4 ps-4">
+    <v-progress-linear height="10" color="primary accent-4" indeterminate rounded />
+  </v-row>
 </template>
 
 <script>

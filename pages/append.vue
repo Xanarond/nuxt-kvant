@@ -4,7 +4,7 @@
       <LoadingScreen />
     </div>
     <div v-else>
-      <v-row v-if="alert" justify="end" class="pt-2">
+      <v-row v-if="alert" justify="end" class="pt-4 ps-4">
         <v-alert
           v-if="message"
           v-model="alert"
@@ -180,8 +180,7 @@ export default {
       const user = this.$store.state.user
       TableService.postDataTable(user).then((res) => {
         this.alert = true
-        const info = res.body.message
-        this.message = info
+        this.message = res.body.message
       })
       this.message = 'Данные успешно добавлены'
       window.setTimeout(() => {
@@ -189,6 +188,9 @@ export default {
         this.message = ''
         this.file = []
         this.result = ''
+        this.create_date = null
+        this.modified_date = null
+        this.access_date = null
         if (this.$route.url) {
           this.$router.push('/')
         }

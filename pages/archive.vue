@@ -1,17 +1,26 @@
 <template>
-  <div v-if="loading">
-    <LoadingScreen />
-  </div>
-  <div v-else>
-    <div>Таблица с архивными данными</div>
-  </div>
+  <v-container fluid>
+    <div v-if="loading">
+      <LoadingScreen />
+    </div>
+    <div v-else>
+      <v-row justify="end" class="pe-2">
+        <v-col cols="3">
+          <UpdateButton />
+        </v-col>
+      </v-row>
+      <ArchiveTable />
+    </div>
+  </v-container>
 </template>
 
 <script>
 import LoadingScreen from '../components/LoadingScreen'
+import ArchiveTable from '../components/ArchiveTable'
+import UpdateButton from '../components/UpdateButton'
 export default {
   name: 'ArchivePage',
-  components: { LoadingScreen },
+  components: { UpdateButton, ArchiveTable, LoadingScreen },
   data () {
     return {
       loading: true
@@ -30,7 +39,7 @@ export default {
       this.stopTimer()
       this.interval = window.setInterval(() => {
         this.loading = false
-      }, 3200)
+      }, 2200)
     }
   }
 }

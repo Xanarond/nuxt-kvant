@@ -6,6 +6,7 @@
     alignment="center"
     key-expr="id"
     :column-width="150"
+    :no-data-text="'The data updating now, and it takes several minutes.'"
   >
     <DxExport :enabled="true" :allow-export-selected-data="true" />
     <DxHeaderFilter
@@ -52,19 +53,20 @@
 
 <script>
 import {
+  DxColumn,
   DxDataGrid,
   DxExport,
   DxFilterRow,
-  DxHeaderFilter, DxPager, DxPaging,
-  DxScrolling, DxColumn,
-  DxSearchPanel, DxSelection
+  DxHeaderFilter, DxPager,
+  DxPaging,
+  DxScrolling, DxSearchPanel, DxSelection
 } from 'devextreme-vue/data-grid'
 import { DxTextArea } from 'devextreme-vue/text-area'
-import TableService from '@/services/table.service'
+import TableService from '../services/table.service'
+import EventBus from '@/middleware/EventBus'
 
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'MainTable',
+  name: 'ArchiveTable',
   components: {
     DxDataGrid,
     DxScrolling,
@@ -101,6 +103,9 @@ export default {
             error.response.data.message) ||
           error.message ||
           error.toString()
+        if (error.response && error.response.status === 403) {
+          EventBus.dispatch('logout')
+        }
       }
     )
     this.$nuxt.$on('updatetable', () => {
@@ -110,11 +115,14 @@ export default {
         },
         (error) => {
           this.content =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString()
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString()
+          if (error.response && error.response.status === 403) {
+            EventBus.dispatch('logout')
+          }
         }
       )
       this.$nuxt.$emit('updating')
@@ -126,4 +134,6 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

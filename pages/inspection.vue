@@ -16,9 +16,10 @@
 
 <script>
 import UpdateButton from '../components/UpdateButton'
+import InspectionTable from '../components/InspectionTable'
 export default {
   name: 'InspectionPage',
-  components: { UpdateButton },
+  components: { InspectionTable, UpdateButton },
   data () {
     return {
       loading: true
@@ -37,7 +38,7 @@ export default {
       this.stopTimer()
       this.interval = window.setInterval(() => {
         this.loading = false
-      }, 3200)
+      }, 2200)
     }
   }
 }

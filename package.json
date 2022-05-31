@@ -51,7 +51,8 @@
     "vuex": "3.6.2",
     "vuex-persistedstate": "^4.1.0",
     "webpack": "^4.46.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "dotenv": "^16.0.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",

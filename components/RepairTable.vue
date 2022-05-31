@@ -13,6 +13,12 @@
       :allow-header-filtering="true"
     />
     <DxPaging :enabled="false" />
+    <DxExport :enabled="true" :allow-export-selected-data="true" />
+    <DxFilterRow
+      :visible="showFilterRow"
+      alignment="center"
+    />
+    <DxSelection mode="multiple" />
     <DxEditing
       :allow-updating="true"
       :allow-adding="false"
@@ -58,15 +64,14 @@
     <DxColumn data-field="INCH (FACT)" />
     <DxColumn :width="180" data-field="SERIAL NUMBER" />
     <DxColumn :width="170" data-field="SU" />
-    <DxColumn :width="125" data-field="STATUS" />
     <DxColumn :width="170" data-field="RB BARCODE" />
     <DxColumn data-field="COMMENT" />
-    <DxColumn data-field="1st Insp DATE" data-type="date" />
-    <DxColumn data-field="2nd Insp DATE" data-type="date" />
+    <DxColumn data-field="Repair Date" data-type="date" />
     <DxColumn data-field="Global Status" alignment="center" />
     <DxColumn data-field="Local Status" alignment="center" />
     <DxColumn data-field="BOX" alignment="center" />
     <DxColumn data-field="Location" alignment="center" />
+    <DxColumn data-field="Responsible" alignment="center" />
     <DxScrolling
       column-rendering-mode="virtual"
       row-rendering-mode="infinite"
@@ -76,6 +81,8 @@
       :show-page-size-selector="true"
       :allowed-page-sizes="[10, 20, 50, 100, 250, 500]"
     />
+    <DxSearchPanel :visible="true" placeholder="Search..." />
+    <DxScrolling column-rendering-mode="virtual" row-rendering-mode="infinite" />
   </DxDataGrid>
 </template>
 
@@ -90,7 +97,7 @@ import {
   DxHeaderFilter, DxPager,
   DxPaging,
   DxPopup,
-  DxScrolling
+  DxScrolling, DxSelection, DxSearchPanel
 } from 'devextreme-vue/data-grid'
 import { DxTextArea } from 'devextreme-vue/text-area'
 import { DxItem } from 'devextreme-vue/form'
@@ -114,7 +121,9 @@ export default {
     DxForm,
     DxItem,
     DxPaging,
-    DxPager
+    DxPager,
+    DxSelection,
+    DxSearchPanel
   },
   data: () => ({
     content: '',
@@ -150,6 +159,9 @@ export default {
             error.response.data.message) ||
           error.message ||
           error.toString()
+          if (error.response && error.response.status === 403) {
+            EventBus.dispatch('logout')
+          }
         }
       )
     })
