@@ -15,10 +15,7 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING,
       },
       SU: {
-        type: Sequelize.STRING,
-      },
-      STATUS: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       'RB BARCODE': {
         type: Sequelize.INTEGER,
@@ -42,7 +39,7 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING
       },
       BOX: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       Location: {
         type: Sequelize.STRING

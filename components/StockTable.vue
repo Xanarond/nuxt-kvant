@@ -102,6 +102,8 @@ import {
 import { DxTextArea } from 'devextreme-vue/text-area'
 import { DxItem } from 'devextreme-vue/form'
 import { DxForm } from 'devextreme-vue'
+import TableService from '@/services/table.service'
+import EventBus from '@/middleware/EventBus'
 
 export default {
   name: 'StockTable',
@@ -132,6 +134,46 @@ export default {
       showSearchPanel: true
     }
   },
+  mounted () {
+    TableService.getStorageTable().then(
+      (response) => {
+        this.content = response.data
+      },
+      (error) => {
+        this.content =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString()
+        if (error.response && error.response.status === 403) {
+          EventBus.dispatch('logout')
+        }
+      }
+    )
+    this.$nuxt.$on('updatetable', () => {
+      TableService.getStorageTable().then(
+        (response) => {
+          this.content = response.data
+        },
+        (error) => {
+          this.content =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString()
+          if (error.response && error.response.status === 403) {
+            EventBus.dispatch('logout')
+          }
+        }
+      )
+      this.$nuxt.$emit('updating')
+    })
+  },
+  beforeDestroy () {
+    this.$nuxt.$off('updatetable')
+  }
 }
 </script>
 

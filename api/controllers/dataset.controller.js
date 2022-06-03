@@ -2,13 +2,13 @@ import TableMutation from '../mutations/tableMutation'
 const fs = require('fs')
 const { Client } = require('pg')
 const XLSX = require('xlsx')
-const moment = require('moment')
+// const moment = require('moment')
 const env = require('../config/db.config')
 const db = require('../models')
-const FILE_PATHNAME = '//106.109.32.200/Logistic/pmakhotkin/Task_list/KWANTDB/Данные для импорта/Panels_test.xlsb'
+const FILE_PATHNAME = process.env.FILE_PATHNAME
 // FILE_PATHNAME = '//106.109.32.200/Logistic/pmakhotkin/Task_list/KWANTDB/Данные для импорта/Panels_test.xlsb'
 
-const { total: Total, inspection: Inspection, storage: Storage, repair: Repair, archive: Archive } = db
+const { total: Total, inspection: Inspection, storage: Storage, repair: Repair } = db
 
 const conn = `postgres://${env.USER}:${env.PASSWORD}@${env.HOST}/${env.DB}` // connection config
 const client = new Client({
@@ -21,8 +21,12 @@ client.connect()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 exports.postSerialNums = (req, res) => {
   // let required_id = ''
+  console.log(req.body)
+  const table_inst = new TableMutation()
+  const { serial_nums, global_status, local_status, location, box, username } = req.body
+  table_inst.updateRows(serial_nums, global_status, local_status, location, box, username)
 
-  const cur_date = moment().format('YYYY-MM-DD')
+  /* const cur_date = moment().format('YYYY-MM-DD')
   const cur_time = moment().format('HH:mm:ss')
   console.log(req.body.serial_nums.length, req.body.serial_nums)
   const serialNums = req.body.serial_nums
@@ -125,7 +129,7 @@ exports.postSerialNums = (req, res) => {
         Storage.create(data)
       })
     }
-  })
+  }) */
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

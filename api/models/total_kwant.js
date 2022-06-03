@@ -2,6 +2,13 @@ module.exports = (sequelize, Sequelize) =>
   sequelize.define(
     'total_kwant',
     {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+        unique: true
+      },
       MATERIAL: {
         type: Sequelize.STRING
       },
@@ -13,9 +20,11 @@ module.exports = (sequelize, Sequelize) =>
       },
       'SERIAL NUMBER': {
         type: Sequelize.STRING,
+        primaryKey: true
       },
       SU: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        primaryKey: true
       },
       DESTINATION: {
         type: Sequelize.STRING
@@ -61,7 +70,7 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING
       },
       BOX: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       Location: {
         type: Sequelize.STRING

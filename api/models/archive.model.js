@@ -57,7 +57,7 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING
       },
       BOX: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       Location: {
         type: Sequelize.STRING

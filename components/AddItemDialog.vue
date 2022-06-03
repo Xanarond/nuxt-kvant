@@ -112,20 +112,18 @@ export default {
   computed: {
     manageItems () {
       if (this.$store.state.user.role === 'ROLE_ADMIN') {
-        return ['Inspection', 'Repair', 'Storage', 'Archive']
+        return ['Inspection', 'Storage', 'Repair']
       }
       return this.$store.state.user.division
     },
     manageLocalStatus () {
       switch (this.section) {
         case 'Inspection':
-          return ['Pending', 'Checked', 'Scrap', 'Archived']
+          return ['Pre-stock after Inspection', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         case 'Storage':
-          return ['Pending', 'SERK_repair', 'Scrap', 'Archived']
+          return ['Stock', 'Pre-repair on SRDC', 'Pre-repair on SERK', 'Transfer to SERK', 'Transfer to Consignmet', 'Pre-verefication', 'Transfer verefication', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         case 'Repair':
-          return ['Pending', 'SERK_repair', 'Checked', 'Scrap', 'Archived']
-        case 'Archive':
-          return ['Scrap', 'Archived']
+          return ['Pending', 'SRDC repair complete', 'Pre-stock after repair', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         default:
           return
       }
@@ -151,17 +149,6 @@ export default {
       this.location = ''
       this.box = ''
       this.componentKey += 1
-
-      switch (this.section) {
-        case 'Inspection':
-          break
-        case 'Storage':
-          break
-        case 'Repair':
-          break
-        case 'Archive':
-          break
-      }
     }
   }
 }

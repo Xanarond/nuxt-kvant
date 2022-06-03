@@ -4,7 +4,7 @@
       <LoadingScreen />
     </div>
     <div v-else>
-      <v-row v-if="alert" justify="end" class="pt-4 ps-4">
+      <v-row v-if="alert" justify="end" class="pt-4 pe-6">
         <v-alert
           v-if="message"
           v-model="alert"
@@ -96,7 +96,6 @@ export default {
     // this.dragAndDropCapable()
     this.loading = true
     TableService.getFileInfo().then((res) => {
-      console.log(res.data)
       this.file = res.data.File_description
       this.create_date = moment(res.data.Create_timestamp).add(3, 'hours').utc().format('DD.MM.YYYY HH:mm:ss')
       this.modified_date = moment(res.data['Last modified timestamp']).add(3, 'hours').utc().format('DD.MM.YYYY HH:mm:ss')
@@ -180,9 +179,10 @@ export default {
       const user = this.$store.state.user
       TableService.postDataTable(user).then((res) => {
         this.alert = true
-        this.message = res.body.message
+        this.message = res.data.message
       })
       this.message = 'Данные успешно добавлены'
+      console.log(this.$route)
       window.setTimeout(() => {
         this.alert = false
         this.message = ''
@@ -191,7 +191,7 @@ export default {
         this.create_date = null
         this.modified_date = null
         this.access_date = null
-        if (this.$route.url) {
+        if (this.$route.path === '/append') {
           this.$router.push('/')
         }
       }, 4000)

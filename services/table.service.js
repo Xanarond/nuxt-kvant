@@ -21,8 +21,24 @@ class TableService {
    * Метод возвращает данные для таблицы ремонта
    * @returns {Promise<AxiosResponse<[]>>}
    */
+  getStorageTable () {
+    return api.get('tables/storage')
+  }
+
+  /**
+   * Метод возвращает данные для таблицы ремонта
+   * @returns {Promise<AxiosResponse<[]>>}
+   */
   getRepairTable () {
     return api.get('tables/repair')
+  }
+
+  /**
+   * Метод возвращает данные для таблицы ремонта
+   * @returns {Promise<AxiosResponse<[]>>}
+   */
+  getArchiveTable () {
+    return api.get('tables/archive')
   }
 
   /**

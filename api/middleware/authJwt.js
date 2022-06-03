@@ -31,8 +31,8 @@ const verifyToken = (req, res, next) => {
 const isAdmin = (req, res, next) => {
   User.findByPk(req.userId).then((user) => {
     user.getRoles().then((roles) => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === 'admin') {
+      for (const item of roles) {
+        if (item.name === 'admin') {
           next()
           return
         }
@@ -44,42 +44,41 @@ const isAdmin = (req, res, next) => {
     })
   })
 }
-
-const isModerator = (req, res, next) => {
+const isWorkerInspectionOrAdmin = (req, res, next) => {
   User.findByPk(req.userId).then((user) => {
-    user.getRoles().then((roles) => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === 'moderator') {
-          next()
-          return
-        }
-      }
+    if (user.division === 'Inspection' || user.role === 'admin') {
+      next()
+      return
+    }
 
-      res.status(403).send({
-        message: 'Require Moderator Role!',
-      })
+    res.status(403).send({
+      message: 'Require Inspection worker rules or Admin role!',
     })
   })
 }
 
-const isModeratorOrAdmin = (req, res, next) => {
+const isWorkerStorageOrAdmin = (req, res, next) => {
   User.findByPk(req.userId).then((user) => {
-    user.getRoles().then((roles) => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === 'moderator') {
-          next()
-          return
-        }
+    if (user.division === 'Storage' || user.role === 'admin') {
+      next()
+      return
+    }
 
-        if (roles[i].name === 'admin') {
-          next()
-          return
-        }
-      }
+    res.status(403).send({
+      message: 'Require Storage worker rules or Admin role!',
+    })
+  })
+}
 
-      res.status(403).send({
-        message: 'Require Moderator or Admin Role!',
-      })
+const isWorkerRepairOrAdmin = (req, res, next) => {
+  User.findByPk(req.userId).then((user) => {
+    if (user.division === 'Repair' || user.role === 'admin') {
+      next()
+      return
+    }
+
+    res.status(403).send({
+      message: 'Require Repair worker rules or Admin role!',
     })
   })
 }
@@ -87,7 +86,8 @@ const isModeratorOrAdmin = (req, res, next) => {
 const authJwt = {
   verifyToken,
   isAdmin,
-  isModerator,
-  isModeratorOrAdmin,
+  isWorkerInspectionOrAdmin,
+  isWorkerStorageOrAdmin,
+  isWorkerRepairOrAdmin
 }
 module.exports = authJwt

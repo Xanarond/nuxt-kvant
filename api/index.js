@@ -67,7 +67,7 @@ function initial () {
 }
 
 // Create a Server
-app.listen(8081, () => {
+app.listen(process.env.SERVER_PORT, () => {
   // const { address: host, port } = index.address()
   // console.log('App listening at http://%s:%s', host, port)
 })

@@ -32,23 +32,30 @@ module.exports = (app) => {
 
   app.get(
     '/api/tables/inspection',
-    [authJwt.verifyToken],
+    [authJwt.verifyToken, authJwt.isWorkerInspectionOrAdmin],
     userCont.inspectionTable
   )
 
   app.get(
+    '/api/tables/storage',
+    [authJwt.verifyToken, authJwt.isWorkerStorageOrAdmin],
+    userCont.storageTable
+  )
+
+  app.get(
     '/api/tables/repair',
-    [authJwt.verifyToken],
+    [authJwt.verifyToken, authJwt.isWorkerRepairOrAdmin],
     userCont.repairTable
   )
 
-  app.post('/api/datasets/update', datasetCont.postSerialNums)
-  app.post('/api/datasets/insert', [authJwt.verifyToken], datasetCont.postDataSet)
-
   app.get(
-    '/api/test/admin',
+    '/api/tables/archive',
     [authJwt.verifyToken, authJwt.isAdmin],
-    userCont.adminBoard
+    userCont.archiveTable
   )
+
+  app.post('/api/datasets/update', [authJwt.verifyToken], datasetCont.postSerialNums)
+  app.post('/api/datasets/insert', [authJwt.verifyToken, authJwt.isAdmin], datasetCont.postDataSet)
+
   app.get('/api/file_info', datasetCont.getFileInfo)
 }

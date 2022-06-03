@@ -64,7 +64,7 @@
     <DxColumn data-field="CLAIM" />
     <DxColumn data-field="INCH (FACT)" />
     <DxColumn :width="180" data-field="SERIAL NUMBER" />
-    <DxColumn :width="170" data-field="SU" />
+    <DxColumn :width="170" data-field="SU" data-type="number" />
     <DxColumn :width="170" data-field="RB BARCODE" />
     <DxColumn data-field="COMMENT" />
     <DxColumn data-field="1st Insp DATE" data-type="date" format="dd.MM.yyyy" />

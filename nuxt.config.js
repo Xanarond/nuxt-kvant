@@ -1,5 +1,9 @@
 import colors from 'vuetify/es5/util/colors'
 
+// eslint-disable-next-line import/default
+import dotenv from 'dotenv'
+dotenv.config()
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -54,7 +58,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/'
+    baseURL: '/api'
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -82,6 +86,10 @@ export default {
       }
     }
   },
+  env: {
+    baseAPI_HOST: process.env.API_HOST
+  },
+
   serverMiddleware: {
     '/api': '~/api'
   },
@@ -96,5 +104,5 @@ export default {
       '/api': '~/api'
     }
   },
-  server: { port: '8080' }
+  server: { host: process.env.HTTPHOST, port: process.env.CLIENT_PORT }
 }

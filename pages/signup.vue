@@ -68,7 +68,7 @@
               v-show="user.role === 'worker'"
               v-model="user.division"
               :rules="div_rules"
-              :items="['Inspection', 'Repair', 'Storage', 'Archive']"
+              :items="['Inspection','Storage', 'Repair']"
               label="Division"
             />
           </v-row>

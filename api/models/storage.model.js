@@ -9,16 +9,13 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING,
       },
       'INCH (FACT)': {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       'SERIAL NUMBER': {
         type: Sequelize.STRING,
       },
       SU: {
-        type: Sequelize.STRING,
-      },
-      STATUS: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       DESTINATION: {
         type: Sequelize.STRING,
@@ -48,7 +45,7 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING
       },
       BOX: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       Location: {
         type: Sequelize.STRING

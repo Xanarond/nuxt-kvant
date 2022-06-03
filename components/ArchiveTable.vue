@@ -92,7 +92,7 @@ export default {
     }
   },
   mounted () {
-    TableService.getPublicContent().then(
+    TableService.getArchiveTable().then(
       (response) => {
         this.content = response.data
       },
@@ -109,7 +109,7 @@ export default {
       }
     )
     this.$nuxt.$on('updatetable', () => {
-      TableService.getPublicContent().then(
+      TableService.getArchiveTable().then(
         (response) => {
           this.content = response.data
         },
