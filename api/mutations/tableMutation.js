@@ -31,6 +31,7 @@ export default class TableMutation {
    * @param su_objects
    */
   initialRows (su_objects) {
+    const compareArr = []
     su_objects.forEach((value) => {
       Total.findOne({
         where: { SU: value.SU },
@@ -41,12 +42,11 @@ export default class TableMutation {
           Inspection.create(value)
           Archive.create(value)
         } else {
-          Total.update(value, { where: { SU: rows.SU } })
-          Inspection.update(value, { where: { SU: rows.SU } })
-          Archive.update(value, { where: { SU: rows.SU } })
+          compareArr.push(rows.SU)
         }
       })
     })
+    return compareArr
   }
 
   singleEdit () {
@@ -70,7 +70,6 @@ export default class TableMutation {
       })
         .then((data) => {
           delete data.id
-
           Archive.create(data).then((row) => {
             if (department === 'Inspection') {
               switch (local_status) {
@@ -103,7 +102,7 @@ export default class TableMutation {
                     Responsible_user: username,
                     '2nd Insp DATE': this.cur_date,
                     '2nd Insp TIME': this.cur_time
-                  }, { where: { id: row.id } })
+                  }, { where: { id: row.id - 1 } })
                   break
                 case 'Pre-scrap':
                   Total.update({
@@ -128,17 +127,16 @@ export default class TableMutation {
                     Location: location,
                     BOX: box,
                     Responsible_user: username,
-                  }, { where: { id: row.id } })
+                  }, { where: { id: row.id - 1 } })
                   break
               }
             }
             if (department === 'Storage') {
               if (local_status === 'Stock') {
-                Archive.findOne({
+                Total.findOne({
                   where: { SU: row.SU },
                   raw: true
                 }).then((st) => {
-                  delete st.id
                   Storage.create(st)
                   Storage.update({
                     'Global Status': department,
@@ -149,21 +147,23 @@ export default class TableMutation {
                   }, { where: { SU: st.SU } })
                 })
 
-                Archive.update({
-                  'Global Status': department,
-                  'Local Status': local_status,
-                  Location: location,
-                  BOX: box,
-                  Responsible_user: username
-                }, { where: { id: row.id } })
-
                 Total.update({
                   'Global Status': department,
                   'Local Status': local_status,
                   Location: location,
                   BOX: box,
-                  Responsible_user: username
+                  Responsible_user: username,
+                  'Storage DATE': this.cur_date
                 }, { where: { SU: row.SU } })
+
+                Archive.update({
+                  'Global Status': department,
+                  'Local Status': local_status,
+                  Location: location,
+                  BOX: box,
+                  Responsible_user: username,
+                  'Storage DATE': this.cur_date
+                }, { where: { id: row.id } })
 
                 Inspection.destroy({
                   where: {
@@ -178,18 +178,11 @@ export default class TableMutation {
                 })
               }
               switch (local_status) {
+                case 'Scrap after approval':
                 case 'Pre-scrap':
                 case 'Pre-repair on SRDC':
                 case 'Pre-repair on SERK':
                 case 'Pre-verefication':
-                  Archive.update({
-                    'Global Status': department,
-                    'Local Status': local_status,
-                    Location: location,
-                    BOX: box,
-                    Responsible_user: username
-                  }, { where: { id: row.id } })
-
                   Total.update({
                     'Global Status': department,
                     'Local Status': local_status,
@@ -205,6 +198,14 @@ export default class TableMutation {
                     BOX: box,
                     Responsible_user: username
                   }, { where: { SU: row.SU } })
+
+                  Archive.update({
+                    'Global Status': department,
+                    'Local Status': local_status,
+                    Location: location,
+                    BOX: box,
+                    Responsible_user: username
+                  }, { where: { id: row.id, } })
                   break
               }
               switch (local_status) {
@@ -235,8 +236,8 @@ export default class TableMutation {
               }
             }
             if (department === 'Repair') {
-              if (local_status === 'Pending') {
-                Archive.update({
+              if (local_status === 'On Repair') {
+                Total.update({
                   'Global Status': department,
                   'Local Status': local_status,
                   Location: location,
@@ -244,11 +245,10 @@ export default class TableMutation {
                   Responsible_user: username
                 }, { where: { id: row.id } })
 
-                Archive.findOne({
-                  where: { id: row.id },
+                Total.findOne({
+                  where: { SU: row.SU },
                   raw: true
                 }).then((st) => {
-                  delete st.id
                   Repair.create(st)
                   Repair.update({
                     'Global Status': department,
@@ -280,6 +280,7 @@ export default class TableMutation {
                 })
               }
               switch (local_status) {
+                case 'Scrap after approval':
                 case 'Pre-scrap':
                 case 'SRDC repair complete':
                 case 'Pre-stock after repair':
@@ -311,7 +312,6 @@ export default class TableMutation {
             }
 
             switch (local_status) {
-              case 'Scrap after approval':
               case 'Transfer Scrap':
                 Total.destroy({
                   where: {
@@ -350,5 +350,16 @@ export default class TableMutation {
           })
         })
     })
+
+    const totalSU = []
+    su_numbers.forEach((value) => {
+      Total.findOne({
+        where: { SU: value },
+        raw: true
+      }).then((row) => {
+        totalSU.push(row.SU)
+      })
+    })
+    return totalSU
   }
 }

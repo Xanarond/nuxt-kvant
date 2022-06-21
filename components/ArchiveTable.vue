@@ -6,7 +6,6 @@
     alignment="center"
     key-expr="id"
     :column-width="150"
-    :no-data-text="'The data updating now, and it takes several minutes.'"
   >
     <DxExport :enabled="true" :allow-export-selected-data="true" />
     <DxHeaderFilter

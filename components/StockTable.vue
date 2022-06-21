@@ -69,7 +69,7 @@
       <DxColumn data-field="CODE" alignment="center" />
       <DxColumn data-field="RB BARCODE" alignment="center" />
       <DxColumn :width="200" data-field="COMMENT" alignment="center" />
-      <DxColumn data-field="Storage Date" data-type="date" alignment="center" />
+      <DxColumn data-field="Storage DATE" data-type="date" alignment="center" />
       <DxColumn data-field="2nd Insp DATE" data-type="date" alignment="center" format="dd.MM.yyyy" />
       <DxColumn data-field="Outbound DATE" data-type="date" alignment="center" format="dd.MM.yyyy" />
       <DxColumn data-field="Scrap DATE" data-type="date" alignment="center" />
@@ -77,7 +77,6 @@
       <DxColumn data-field="Local Status" alignment="center" />
       <DxColumn data-field="BOX" alignment="center" />
       <DxColumn data-field="Location" alignment="center" />
-      <DxColumn data-field="Responsible_user" alignment="center" caption="Responsible" />
       <DxPaging :page-size="10" />
       <DxPager
         :show-page-size-selector="true"

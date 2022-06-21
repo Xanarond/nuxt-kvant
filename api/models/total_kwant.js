@@ -24,7 +24,7 @@ module.exports = (sequelize, Sequelize) =>
       },
       SU: {
         type: Sequelize.INTEGER,
-        primaryKey: true
+        unique: true,
       },
       DESTINATION: {
         type: Sequelize.STRING

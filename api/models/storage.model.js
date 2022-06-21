@@ -16,6 +16,7 @@ module.exports = (sequelize, Sequelize) =>
       },
       SU: {
         type: Sequelize.INTEGER,
+        unique: true
       },
       DESTINATION: {
         type: Sequelize.STRING,

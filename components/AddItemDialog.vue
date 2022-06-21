@@ -1,5 +1,6 @@
 <template>
   <div>
+    <FailInputSUAllert :su="mismatchSU" />
     <v-row justify="center" style="margin-right: 10px">
       <v-dialog v-model="dialog" persistent scrollable max-width="1000px">
         <template #activator="{ on, attrs }">
@@ -93,9 +94,11 @@
 
 <script>
 import TableService from '@/services/table.service'
+import FailInputSUAllert from '@/components/FailInputSUAllert'
 
 export default {
   name: 'AddItemDialog',
+  components: { FailInputSUAllert },
   data: () => ({
     su_rules: [
       value => !!value || 'SU Number Required.',
@@ -107,7 +110,8 @@ export default {
     status: '',
     location: '',
     box: '',
-    componentKey: 0
+    componentKey: 0,
+    mismatchSU: []
   }),
   computed: {
     manageItems () {
@@ -123,7 +127,7 @@ export default {
         case 'Storage':
           return ['Stock', 'Pre-repair on SRDC', 'Pre-repair on SERK', 'Transfer to SERK', 'Transfer to Consignmet', 'Pre-verefication', 'Transfer verefication', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         case 'Repair':
-          return ['Pending', 'SRDC repair complete', 'Pre-stock after repair', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
+          return ['On Repair', 'SRDC repair complete', 'Pre-stock after repair', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         default:
           return
       }
@@ -141,8 +145,22 @@ export default {
     },
     handleItemAdd () {
       const panelsSet = new Set(this.panels)
-      console.log([...panelsSet].flat(1), this.section, this.status, this.location, this.box)
+      const panelArr = [...panelsSet].flat(1)
+      // console.log([...panelsSet].flat(1), this.section, this.status, this.location, this.box)
       TableService.postItems([...panelsSet].flat(1), this.section, this.status, this.location, this.box, this.$store.state.user.username)
+        .then((value) => {
+          const matchBuf = value.data.matching_SU
+          const matchArr = [...new Set(matchBuf)]
+          const bufArr = []
+          matchArr.forEach((val) => {
+            bufArr.push(val.toString())
+          })
+          this.mismatchSU = panelArr.filter(item => !bufArr.includes(item))
+          if (this.mismatchSU.length > 0) {
+            this.$nuxt.$emit('alert_input')
+          }
+        })
+
       this.panels = []
       this.section = ''
       this.status = ''

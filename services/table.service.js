@@ -43,7 +43,7 @@ class TableService {
 
   /**
    * Метод для передачи информации на сервер об изменении SU
-   * @param {[number]} nums номера su
+   * @param {[string]} nums номера su
    * @param {string} gs глобальный статус
    * @param {string} ls локальный статус
    * @param loc {string} Location

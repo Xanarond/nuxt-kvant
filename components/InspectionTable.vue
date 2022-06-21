@@ -73,7 +73,6 @@
     <DxColumn data-field="Local Status" alignment="center" />
     <DxColumn data-field="BOX" alignment="center" />
     <DxColumn data-field="Location" alignment="center" />
-    <DxColumn data-field="Responsible" alignment="center" />
     <DxScrolling
       column-rendering-mode="virtual"
       row-rendering-mode="infinite"

@@ -15,7 +15,8 @@ module.exports = (sequelize, Sequelize) =>
         type: Sequelize.STRING,
       },
       SU: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        unique: true
       },
       STATUS: {
         type: Sequelize.STRING,

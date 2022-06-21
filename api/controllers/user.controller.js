@@ -1,4 +1,3 @@
-const insp = require('../data/inspection.json')
 const db = require('../models/index')
 
 const { total: Total, inspection: Inspection, repair: Repair, storage: Storage, archive: Archive } = db

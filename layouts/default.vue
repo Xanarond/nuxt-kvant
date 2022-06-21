@@ -171,7 +171,7 @@
       </v-dialog>
     </v-app-bar>
     <v-footer :absolute="true" app content="center">
-      <span>KWANT DB &copy; {{ new Date().getFullYear() }}</span>
+      <span>KVANT DB &copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
@@ -213,7 +213,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'KWANT',
+      title: 'KVANT',
       dialog: false
     }
   },

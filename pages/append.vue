@@ -1,5 +1,6 @@
 <template>
   <div id="file-drag-drop">
+    <FailSUAllert :numbers="failing_su" />
     <div v-if="loading">
       <LoadingScreen />
     </div>
@@ -72,10 +73,11 @@
 import moment from 'moment'
 import LoadingScreen from '../components/LoadingScreen'
 import TableService from '@/services/table.service'
+import FailSUAllert from '@/components/FailSUAllert'
 
 export default {
   name: 'AppendPage',
-  components: { LoadingScreen },
+  components: { LoadingScreen, FailSUAllert },
   data () {
     return {
       drag: false,
@@ -88,6 +90,8 @@ export default {
       modified_date: '',
       access_date: '',
       loading: false,
+      failing_su: [],
+      alert_su: false
     }
   },
   created () {
@@ -180,20 +184,24 @@ export default {
       TableService.postDataTable(user).then((res) => {
         this.alert = true
         this.message = res.data.message
+        if (res.data.matching_SU.length > 0) {
+          const matchArr = new Set(res.data.matching_SU)
+          this.failing_su = [...matchArr]
+          this.$nuxt.$emit('alert_su')
+        }
       })
-      this.message = 'Данные успешно добавлены'
       console.log(this.$route)
       window.setTimeout(() => {
         this.alert = false
         this.message = ''
-        this.file = []
         this.result = ''
+        /* this.file = []
         this.create_date = null
         this.modified_date = null
-        this.access_date = null
-        if (this.$route.path === '/append') {
+        this.access_date = null */
+        /*  if (this.$route.path === '/append') {
           this.$router.push('/')
-        }
+        } */
       }, 4000)
     }
   }
