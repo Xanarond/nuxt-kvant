@@ -18,9 +18,10 @@ client.connect()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 exports.postSerialNums = (req, res) => {
   // let required_id = ''
+  const { serial_nums, global_status, local_status, location, box, username } = req.body
   console.log(req.body)
   const table_inst = new TableMutation()
-  const { serial_nums, global_status, local_status, location, box, username } = req.body
+  // const warningSU = table_inst.checkRowsStatuses(serial_nums, global_status, local_status)
   const mismatchSU = table_inst.updateRows(serial_nums, global_status, local_status, location, box, username)
 
   const p1 = new Promise((resolve, reject) => {
@@ -34,111 +35,6 @@ exports.postSerialNums = (req, res) => {
   p1.then((values) => {
     res.send({ message: 'Данные добавлены!', matching_SU: values })
   })
-
-  /* const cur_date = moment().format('YYYY-MM-DD')
-  const cur_time = moment().format('HH:mm:ss')
-  console.log(req.body.serial_nums.length, req.body.serial_nums)
-  const serialNums = req.body.serial_nums
-
-  serialNums.forEach((val) => {
-    Total.findOne({
-      where: { SU: val },
-      raw: true
-    })
-      .then((data) => {
-        delete data.id
-        Total.create(data).then((row) => {
-          switch (req.body.global_status) {
-            case 'Inspection':
-              Total.update({
-                'Global Status': req.body.global_status,
-                'Local Status': req.body.local_status,
-                Location: req.body.location,
-                BOX: req.body.box,
-                '2nd Insp DATE': cur_date,
-                '2nd Insp TIME': cur_time,
-                Responsible_user: req.body.username
-              }, { where: { id: row.id } })
-              break
-            case 'Repair':
-              Total.update({
-                'Global Status': req.body.global_status,
-                'Local Status': req.body.local_status,
-                Location: req.body.location,
-                BOX: req.body.box,
-                Responsible_user: req.body.username
-              }, { where: { id: row.id } })
-              break
-            default:
-              Total.update({
-                'Global Status': req.body.global_status,
-                'Local Status': req.body.local_status,
-                Location: req.body.location,
-                BOX: req.body.box,
-                Responsible_user: req.body.username
-              }, { where: { id: row.id } })
-              break
-          }
-        })
-      })
-
-    if (req.body.global_status === 'Inspection') {
-      if (req.body.local_status === 'Scrap') {
-        Inspection.destroy({
-          where: {
-            SU: val
-          }
-        })
-      }
-      Inspection.update({
-        'Global Status': req.body.global_status,
-        'Local Status': req.body.local_status,
-        Location: req.body.location,
-        BOX: req.body.box,
-        '2nd Insp DATE': cur_date
-      }, { where: { SU: val } })
-    }
-
-    if (req.body.global_status === 'Repair') {
-      if (req.body.local_status === 'Scrap') {
-        Repair.destroy({
-          where: {
-            SU: val
-          }
-        })
-      }
-
-      Total.findOne({
-        where: { SU: val },
-        raw: true
-      }).then((data) => {
-        delete data.id
-        console.log(data)
-        Repair.create(data, {
-          'Global Status': req.body.global_status,
-          'Local Status': req.body.local_status,
-          Location: req.body.location,
-          BOX: req.body.box
-        })
-      })
-    }
-
-    if (req.body.global_status === 'Storage') {
-      if (req.body.local_status === 'Scrap') {
-        Storage.destroy({
-          where: {
-            SU: val
-          }
-        })
-      }
-      Total.findAll({
-        where: { SU: val },
-        raw: true
-      }).then((data) => {
-        Storage.create(data)
-      })
-    }
-  }) */
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

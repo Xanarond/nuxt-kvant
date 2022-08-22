@@ -33,7 +33,7 @@
     <DxColumn data-field="2nd Insp TIME" data-type="time" alignment="center" format="HH.mm.ss" />
     <DxColumn data-field="Putaway DATE" data-type="date" alignment="center" format="dd.MM.yyyy" />
     <DxColumn data-field="Outbound DATE" data-type="date" alignment="center" format="dd.MM.yyyy" />
-    <DxColumn data-field="Scrap DATE" data-type="date" alignment="center" />
+    <DxColumn data-field="Scrap DATE" data-type="date" alignment="center" format="dd.MM.yyyy" />
     <DxColumn data-field="Global Status" alignment="center" />
     <DxColumn data-field="Local Status" alignment="center" />
     <DxColumn data-field="BOX" alignment="center" />
@@ -46,6 +46,13 @@
     />
     <DxSearchPanel :visible="true" placeholder="Search..." />
     <DxScrolling column-rendering-mode="virtual" row-rendering-mode="infinite" />
+    <DxSummary>
+      <DxTotalItem
+        column="id"
+        summary-type="count"
+        display-format="Rows: {0}"
+      />
+    </DxSummary>
   </DxDataGrid>
   <!--    <DxScrolling column-rendering-mode="virtual" row-rendering-mode="infinite"/>-->
 </template>
@@ -58,7 +65,7 @@ import {
   DxFilterRow,
   DxHeaderFilter, DxPager,
   DxPaging,
-  DxScrolling, DxSearchPanel, DxSelection
+  DxScrolling, DxSearchPanel, DxSelection, DxSummary, DxTotalItem
 } from 'devextreme-vue/data-grid'
 import { DxTextArea } from 'devextreme-vue/text-area'
 import TableService from '../services/table.service'
@@ -79,7 +86,9 @@ export default {
     DxPaging,
     DxPager,
     DxSearchPanel,
-    DxSelection
+    DxSelection,
+    DxSummary,
+    DxTotalItem
   },
   // props: { loading: Boolean },
   data () {

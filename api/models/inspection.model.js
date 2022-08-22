@@ -52,6 +52,6 @@ module.exports = (sequelize, Sequelize) =>
       tableName: 'inspection',
       charset: 'utf8',
       collate: 'utf8_general_ci',
-      timestamps: false
+      timestamps: false,
     },
   )

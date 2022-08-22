@@ -28,6 +28,10 @@ db.repair = require('./repair.model')(sequelize, Sequelize)
 db.storage = require('./storage.model')(sequelize, Sequelize)
 db.total = require('./total_kwant')(sequelize, Sequelize)
 db.archive = require('./archive.model')(sequelize, Sequelize)
+db.box = require('./box.model')(sequelize, Sequelize)
+db.inspection_validation = require('./inspection_validation.model')(sequelize, Sequelize)
+db.storage_validation = require('./storage_validation.model')(sequelize, Sequelize)
+db.repair_validation = require('./repair_validation.model')(sequelize, Sequelize)
 
 db.role.belongsToMany(db.user, {
   through: 'user_roles',

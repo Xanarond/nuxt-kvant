@@ -25,7 +25,7 @@
       <form method="post" @submit.prevent="handleRegister">
         <v-card class="mx-auto card" max-width="500">
           <v-card-title class="headline justify-center">
-            Register user into KWANT
+            Register user into KVANT
           </v-card-title>
           <v-row justify="center">
             <v-col cols="4">

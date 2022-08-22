@@ -18,11 +18,88 @@
             <v-card-title>
               <span class="text-h5">Update Status Panel</span>
             </v-card-title>
+            <v-container>
+              <v-row v-if="useAdminRules" justify="center">
+                <v-col cols="12" md="8">
+                  <v-select
+                    v-model="section"
+                    :items="[...manageItems]"
+                    label="Global Status"
+                    required
+                    class="pa-0"
+                  />
+                  <v-select
+                    v-model="status"
+                    :items="[...manageAdminLocalStatus]"
+                    label="Local Status"
+                    class="pa-0"
+                  />
+                  <v-text-field
+                    ref="field"
+                    v-model="location"
+                    label="Location"
+                    class="pa-0"
+                  />
+                  <v-text-field
+                    ref="field"
+                    v-model="box"
+                    label="BOX"
+                    class="pa-0"
+                  />
+                </v-col>
+              </v-row>
+              <v-row v-if="!useAdminRules" justify="center">
+                <v-col cols="12" md="8">
+                  <v-select
+                    v-model="$store.state.user.division"
+                    :item-value="$store.state.user.division"
+                    :item-text="$store.state.user.division"
+                    :items="[...$store.state.user.division]"
+                    label="Global Status"
+                    required
+                    class="pa-0"
+                  />
+                  <v-select
+                    v-model="status"
+                    :items="[...manageLocalStatus]"
+                    label="Local Status"
+                    class="pa-0"
+                  />
+                  <v-text-field
+                    ref="field"
+                    v-model="location"
+                    label="Location"
+                    class="pa-0"
+                  />
+                  <v-text-field
+                    ref="field"
+                    v-model="box"
+                    label="BOX"
+                    class="pa-0"
+                  />
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="10">
+                  <v-divider class="pa-0" />
+                </v-col>
+              </v-row>
+            </v-container>
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12" md="8">
-                    <template v-for="(item, index) in 100">
+                  <v-col cols="12" md="1">
+                    <template v-for="(index) in 150">
+                      <v-text-field
+                        :key="index"
+                        :value="index"
+                        readonly
+                        color="#fff"
+                      />
+                    </template>
+                  </v-col>
+                  <v-col cols="12" md="11">
+                    <template v-for="(item, index) in 150">
                       <v-text-field
                         :key="item.key"
                         ref="field"
@@ -32,33 +109,8 @@
                       />
                     </template>
                   </v-col>
-                  <v-divider vertical />
-                  <v-col cols="12" md="4">
-                    <v-select
-                      v-model="section"
-                      :items="[...manageItems]"
-                      label="Global Status"
-                      required
-                    />
-                    <v-select
-                      v-model="status"
-                      :items="[...manageLocalStatus]"
-                      label="Local Status"
-                    />
-                    <v-text-field
-                      ref="field"
-                      v-model="location"
-                      label="Location"
-                    />
-                    <v-text-field
-                      ref="field"
-                      v-model="box"
-                      label="BOX"
-                    />
-                  </v-col>
                 </v-row>
               </v-container>
-              <small>*indicates required field</small>
             </v-card-text>
             <v-card-actions>
               <v-spacer />
@@ -102,8 +154,18 @@ export default {
   data: () => ({
     su_rules: [
       value => !!value || 'SU Number Required.',
-      value => (value && value.length <= 6) || 'Max 6 characters'
+      value => (value && value.length <= 6) || 'Max 6 characters',
     ],
+    su_num: {
+      nums: (value) => {
+        const pattern =
+          /\d+/
+        return (
+          pattern.test(value) ||
+          'Only number symbols'
+        )
+      },
+    },
     dialog: false,
     panels: [],
     section: [],
@@ -111,7 +173,9 @@ export default {
     location: '',
     box: '',
     componentKey: 0,
-    mismatchSU: []
+    mismatchSU: [],
+    alert_input: false,
+    dialogKey: 0
   }),
   computed: {
     manageItems () {
@@ -120,19 +184,42 @@ export default {
       }
       return this.$store.state.user.division
     },
-    manageLocalStatus () {
+    manageAdminLocalStatus () {
       switch (this.section) {
         case 'Inspection':
           return ['Pre-stock after Inspection', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         case 'Storage':
-          return ['Stock', 'Pre-repair on SRDC', 'Pre-repair on SERK', 'Transfer to SERK', 'Transfer to Consignmet', 'Pre-verefication', 'Transfer verefication', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
+          return ['Stock', 'Pre-repair on SRDC', 'Pre-repair on SERK', 'Transfer to SERK', 'Transfer to Consignment', 'Pre-verification', 'Transfer verification', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         case 'Repair':
-          return ['On Repair', 'SRDC repair complete', 'Pre-stock after repair', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
+          return ['On Repair', 'SRDC repair complete', 'Pre-stock after repair']
         default:
           return
       }
+    },
+
+    manageLocalStatus () {
+      switch (this.$store.state.user.division) {
+        case 'Inspection':
+          return ['Pre-stock after Inspection', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
+        case 'Storage':
+          return ['Stock', 'Pre-repair on SRDC', 'Pre-repair on SERK', 'Transfer to SERK', 'Transfer to Consignment', 'Pre-verification', 'Transfer verification', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
+        case 'Repair':
+          return ['On Repair', 'SRDC repair complete', 'Pre-stock after repair']
+        default:
+          return
+      }
+    },
+    currentUser () {
+      return this.$store.state.user
+    },
+    useAdminRules () {
+      if (this.currentUser && this.currentUser.role) {
+        return this.currentUser.role === 'ROLE_ADMIN'
+      }
+      return false
     }
   },
+
   methods: {
     closeDialog () {
       this.panels = []
@@ -142,6 +229,8 @@ export default {
       this.box = ''
       this.componentKey += 1
       this.dialog = false
+      this.alert_input = false
+      this.mismatchSU = []
     },
     handleItemAdd () {
       const panelsSet = new Set(this.panels)

@@ -46,6 +46,9 @@ export default {
     this.$nuxt.$on('alert_su', () => {
       this.dialog = true
     })
+  },
+  beforeDestroy () {
+    this.$nuxt.$off('alert_su')
   }
 }
 </script>

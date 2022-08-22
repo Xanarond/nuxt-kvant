@@ -49,6 +49,31 @@ export default class TableMutation {
     return compareArr
   }
 
+  checkRowsStatuses (su_numbers, department, local_status) {
+    const warningSU = []
+    su_numbers.forEach((val) => {
+      Total.findOne({
+        where: {
+          SU: val,
+        },
+        raw: true
+      }).then((row) => {
+        switch (department) {
+          case 'Inspection':
+            // eslint-disable-next-line no-mixed-operators
+            if (local_status === 'Pending' || local_status === 'Pre-stock after Inspection' && row['Local Status'] === 'Pending' || row['Local Status'] === 'Pre-stock after Inspection') {
+              warningSU.push(row.SU)
+            }
+            // eslint-disable-next-line no-mixed-operators
+            if (local_status === 'Pre-stock after Inspection' || local_status === 'Pre-scrap' && row['Local Status'] === 'Pre-stock after Inspection' || row['Local Status'] === 'Pre-scrap') {
+              warningSU.push(row.SU)
+            }
+        }
+      })
+    })
+    return warningSU
+  }
+
   singleEdit () {
 
   }
@@ -102,7 +127,7 @@ export default class TableMutation {
                     Responsible_user: username,
                     '2nd Insp DATE': this.cur_date,
                     '2nd Insp TIME': this.cur_time
-                  }, { where: { id: row.id - 1 } })
+                  }, { where: { id: row.id } })
                   break
                 case 'Pre-scrap':
                   Total.update({
@@ -111,6 +136,7 @@ export default class TableMutation {
                     Location: location,
                     BOX: box,
                     Responsible_user: username,
+                    'Scrap DATE': this.cur_date
                   }, { where: { SU: row.SU } })
 
                   Inspection.update({
@@ -127,7 +153,8 @@ export default class TableMutation {
                     Location: location,
                     BOX: box,
                     Responsible_user: username,
-                  }, { where: { id: row.id - 1 } })
+                    'Scrap DATE': this.cur_date
+                  }, { where: { id: row.id } })
                   break
               }
             }
@@ -143,7 +170,8 @@ export default class TableMutation {
                     'Local Status': local_status,
                     Location: location,
                     BOX: box,
-                    Responsible_user: username
+                    Responsible_user: username,
+                    'Putaway DATE': this.cur_date
                   }, { where: { SU: st.SU } })
                 })
 
@@ -153,7 +181,7 @@ export default class TableMutation {
                   Location: location,
                   BOX: box,
                   Responsible_user: username,
-                  'Storage DATE': this.cur_date
+                  'Putaway DATE': this.cur_date
                 }, { where: { SU: row.SU } })
 
                 Archive.update({
@@ -162,7 +190,7 @@ export default class TableMutation {
                   Location: location,
                   BOX: box,
                   Responsible_user: username,
-                  'Storage DATE': this.cur_date
+                  'Putaway DATE': this.cur_date
                 }, { where: { id: row.id } })
 
                 Inspection.destroy({
@@ -177,18 +205,18 @@ export default class TableMutation {
                   }
                 })
               }
+
               switch (local_status) {
-                case 'Scrap after approval':
                 case 'Pre-scrap':
-                case 'Pre-repair on SRDC':
                 case 'Pre-repair on SERK':
-                case 'Pre-verefication':
+                case 'Pre-repair on SRDC':
+                case 'Pre-verification':
                   Total.update({
                     'Global Status': department,
                     'Local Status': local_status,
                     Location: location,
                     BOX: box,
-                    Responsible_user: username
+                    Responsible_user: username,
                   }, { where: { SU: row.SU } })
 
                   Storage.update({
@@ -196,7 +224,7 @@ export default class TableMutation {
                     'Local Status': local_status,
                     Location: location,
                     BOX: box,
-                    Responsible_user: username
+                    Responsible_user: username,
                   }, { where: { SU: row.SU } })
 
                   Archive.update({
@@ -204,13 +232,41 @@ export default class TableMutation {
                     'Local Status': local_status,
                     Location: location,
                     BOX: box,
-                    Responsible_user: username
+                    Responsible_user: username,
+                  }, { where: { id: row.id, } })
+                  break
+                case 'Scrap after approval':
+                  Total.update({
+                    'Global Status': department,
+                    'Local Status': local_status,
+                    Location: location,
+                    BOX: box,
+                    Responsible_user: username,
+                    'Scrap DATE': this.cur_date
+                  }, { where: { SU: row.SU } })
+
+                  Storage.update({
+                    'Global Status': department,
+                    'Local Status': local_status,
+                    Location: location,
+                    BOX: box,
+                    Responsible_user: username,
+                    'Scrap DATE': this.cur_date
+                  }, { where: { SU: row.SU } })
+
+                  Archive.update({
+                    'Global Status': department,
+                    'Local Status': local_status,
+                    Location: location,
+                    BOX: box,
+                    Responsible_user: username,
+                    'Scrap DATE': this.cur_date
                   }, { where: { id: row.id, } })
                   break
               }
               switch (local_status) {
-                case 'Transfer verefication':
-                case 'Transfer to Consignmet':
+                case 'Transfer verification':
+                case 'Transfer to Consignment':
                 case 'Transfer to SERK':
                   Total.destroy({
                     where: {
@@ -267,6 +323,14 @@ export default class TableMutation {
                   Responsible_user: username
                 }, { where: { SU: row.SU } })
 
+                Archive.update({
+                  'Global Status': department,
+                  'Local Status': local_status,
+                  Location: location,
+                  BOX: box,
+                  Responsible_user: username
+                }, { where: { id: row.id } })
+
                 Inspection.destroy({
                   where: {
                     SU: row.SU
@@ -279,9 +343,8 @@ export default class TableMutation {
                   }
                 })
               }
+
               switch (local_status) {
-                case 'Scrap after approval':
-                case 'Pre-scrap':
                 case 'SRDC repair complete':
                 case 'Pre-stock after repair':
                   Total.update({
@@ -289,7 +352,8 @@ export default class TableMutation {
                     'Local Status': local_status,
                     Location: location,
                     BOX: box,
-                    Responsible_user: username
+                    Responsible_user: username,
+                    'Scrap DATE': this.cur_date
                   }, { where: { SU: row.SU } })
 
                   Repair.update({
@@ -310,7 +374,7 @@ export default class TableMutation {
                   break
               }
             }
-
+            // Общая логика по статусам
             switch (local_status) {
               case 'Transfer Scrap':
                 Total.destroy({
@@ -361,5 +425,8 @@ export default class TableMutation {
       })
     })
     return totalSU
+  }
+
+  checkStatusesRows () {
   }
 }

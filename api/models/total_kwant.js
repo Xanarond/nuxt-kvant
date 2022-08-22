@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) =>
   sequelize.define(
-    'total_kwant',
+    'total_kvant',
     {
       id: {
         type: Sequelize.INTEGER,
@@ -82,7 +82,7 @@ module.exports = (sequelize, Sequelize) =>
     {
       underscored: false,
       freezeTableName: true,
-      tableName: 'total_kwant',
+      tableName: 'total_kvant',
       charset: 'utf8',
       collate: 'utf8_general_ci',
       timestamps: false

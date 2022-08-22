@@ -15,7 +15,7 @@
     <form id="app" method="post" @submit.prevent="handleLogin">
       <v-card class="mx-auto card" max-width="500">
         <v-card-title class="headline justify-center">
-          Welcome to KWANT
+          Welcome to KVANT
         </v-card-title>
         <v-row justify="center">
           <v-col cols="4">

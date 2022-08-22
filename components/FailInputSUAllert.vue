@@ -22,7 +22,7 @@
           <v-btn
             color="red darken-1"
             text
-            @click="dialog = false"
+            @click.stop="closeDialog"
           >
             OK
           </v-btn>
@@ -39,13 +39,22 @@ export default {
   props: ['su'],
   data () {
     return {
-      dialog: false
+      dialog: false,
+      dialogKey: 0
     }
   },
   mounted () {
     this.$nuxt.$on('alert_input', () => {
       this.dialog = true
     })
+  },
+  beforeDestroy () {
+    this.$nuxt.$off('alert_input')
+  },
+  methods: {
+    closeDialog () {
+      this.dialog = false
+    }
   }
 }
 </script>

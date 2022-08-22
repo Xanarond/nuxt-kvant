@@ -59,12 +59,11 @@
         </DxItem>
       </DxForm>
     </DxEditing>
-    <DxColumn :width="120" data-field="id" :allow-editing="false" caption="ID" alignment="center" />
+    <DxColumn :width="170" data-field="SU" data-type="number" />
     <DxColumn data-field="MATERIAL" caption="MATERIAL" />
     <DxColumn data-field="CLAIM" />
     <DxColumn data-field="INCH (FACT)" />
     <DxColumn :width="180" data-field="SERIAL NUMBER" />
-    <DxColumn :width="170" data-field="SU" data-type="number" />
     <DxColumn :width="170" data-field="RB BARCODE" />
     <DxColumn data-field="COMMENT" />
     <DxColumn data-field="1st Insp DATE" data-type="date" format="dd.MM.yyyy" />
@@ -84,6 +83,13 @@
     />
     <DxSearchPanel :visible="true" placeholder="Search..." />
     <DxScrolling column-rendering-mode="virtual" row-rendering-mode="infinite" />
+    <DxSummary>
+      <DxTotalItem
+        column="SU"
+        summary-type="count"
+        display-format="Rows: {0}"
+      />
+    </DxSummary>
   </DxDataGrid>
 </template>
 
@@ -98,7 +104,7 @@ import {
   DxHeaderFilter, DxPager,
   DxPaging,
   DxPopup,
-  DxScrolling, DxSelection, DxSearchPanel
+  DxScrolling, DxSelection, DxSearchPanel, DxSummary, DxTotalItem
 } from 'devextreme-vue/data-grid'
 import { DxTextArea } from 'devextreme-vue/text-area'
 import { DxItem } from 'devextreme-vue/form'
@@ -123,7 +129,9 @@ export default {
     DxPaging,
     DxPager,
     DxSelection,
-    DxSearchPanel
+    DxSearchPanel,
+    DxSummary,
+    DxTotalItem
   },
 
   data: () => ({

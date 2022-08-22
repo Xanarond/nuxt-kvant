@@ -27,7 +27,7 @@ module.exports = (sequelize, Sequelize) =>
       COMMENT: {
         type: Sequelize.TEXT,
       },
-      'Storage DATE': {
+      'Putaway DATE': {
         type: Sequelize.DATEONLY,
       },
       '2nd Insp DATE': {

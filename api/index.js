@@ -20,6 +20,7 @@ app.use(cors(corsOptions))
 
 require('../api/routes/main.routes')(app)
 const db = require('../api/models/index')
+const { valid_obj } = require('./queries/validation')
 
 /* const httpsOptions = {
   key: fs.readFileSync("./ssl/index.key"), // путь к ключу
@@ -64,6 +65,9 @@ function initial () {
         user.setRoles(roles)
       })
     }))
+  db.sequelize.query(valid_obj.inspection)
+  db.sequelize.query(valid_obj.storage)
+  db.sequelize.query(valid_obj.repair)
 }
 
 // Create a Server
