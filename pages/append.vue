@@ -73,7 +73,7 @@
 import moment from 'moment'
 import LoadingScreen from '../components/LoadingScreen'
 import TableService from '@/services/table.service'
-import FailSUAllert from '@/components/FailSUAllert'
+import FailSUAllert from '@/components/FailSUAlert'
 
 export default {
   name: 'AppendPage',

@@ -19,6 +19,7 @@ module.exports = {
     'comma-dangle': 'off',
     'no-debugger': 'off',
     'vue/return-in-computed-property': 'off',
-    'no-useless-return': 'off'
+    'no-useless-return': 'off',
+    'no-mixed-operators': 'off'
   },
 }

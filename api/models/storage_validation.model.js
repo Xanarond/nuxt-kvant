@@ -5,34 +5,34 @@ module.exports = (sequelize, Sequelize) =>
       primaryKey: true,
     },
     Stock: {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Pre-repair on SRDC': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Pre-repair on SERK': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Transfer to SERK': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Transfer to Consignment': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Pre-verification': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Transfer verification': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Pre-scrap': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Scrap after approval': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Transfer Scrap': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
   },
   {

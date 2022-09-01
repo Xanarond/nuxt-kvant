@@ -1,6 +1,7 @@
 <template>
   <div>
-    <FailInputSUAllert :su="mismatchSU" />
+    <FailInputSUAlert :su="mismatchSU" />
+    <FailStatusAlert :statuses="warningSU" />
     <v-row justify="center" style="margin-right: 10px">
       <v-dialog v-model="dialog" persistent scrollable max-width="1000px">
         <template #activator="{ on, attrs }">
@@ -146,11 +147,12 @@
 
 <script>
 import TableService from '@/services/table.service'
-import FailInputSUAllert from '@/components/FailInputSUAllert'
+import FailInputSUAlert from '@/components/FailInputSUAlert'
+import FailStatusAlert from '@/components/FailStatusAlert'
 
 export default {
   name: 'AddItemDialog',
-  components: { FailInputSUAllert },
+  components: { FailInputSUAlert, FailStatusAlert },
   data: () => ({
     su_rules: [
       value => !!value || 'SU Number Required.',
@@ -174,6 +176,7 @@ export default {
     box: '',
     componentKey: 0,
     mismatchSU: [],
+    warningSU: [],
     alert_input: false,
     dialogKey: 0
   }),
@@ -191,7 +194,7 @@ export default {
         case 'Storage':
           return ['Stock', 'Pre-repair on SRDC', 'Pre-repair on SERK', 'Transfer to SERK', 'Transfer to Consignment', 'Pre-verification', 'Transfer verification', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         case 'Repair':
-          return ['On Repair', 'SRDC repair complete', 'Pre-stock after repair']
+          return ['On Repair', 'Pre-stock after repair']
         default:
           return
       }
@@ -204,7 +207,7 @@ export default {
         case 'Storage':
           return ['Stock', 'Pre-repair on SRDC', 'Pre-repair on SERK', 'Transfer to SERK', 'Transfer to Consignment', 'Pre-verification', 'Transfer verification', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         case 'Repair':
-          return ['On Repair', 'SRDC repair complete', 'Pre-stock after repair']
+          return ['On Repair', 'Pre-stock after repair']
         default:
           return
       }
@@ -230,23 +233,27 @@ export default {
       this.componentKey += 1
       this.dialog = false
       this.alert_input = false
+      this.alert_status = false
       this.mismatchSU = []
+      this.warningSU = []
     },
     handleItemAdd () {
       const panelsSet = new Set(this.panels)
-      const panelArr = [...panelsSet].flat(1)
       // console.log([...panelsSet].flat(1), this.section, this.status, this.location, this.box)
       TableService.postItems([...panelsSet].flat(1), this.section, this.status, this.location, this.box, this.$store.state.user.username)
         .then((value) => {
-          const matchBuf = value.data.matching_SU
-          const matchArr = [...new Set(matchBuf)]
-          const bufArr = []
-          matchArr.forEach((val) => {
-            bufArr.push(val.toString())
-          })
-          this.mismatchSU = panelArr.filter(item => !bufArr.includes(item))
-          if (this.mismatchSU.length > 0) {
+          console.log(value.data)
+          if (value.data.mismatchSU > 0 && value.data.alert === true) {
+            this.mismatchSU = value.data.mismatchSU
             this.$nuxt.$emit('alert_input')
+          }
+          if (value.data.warningSU !== undefined && value.data.warningSU.length > 0 && value.data.alert === true) {
+            const errors = []
+            value.data.warningSU.forEach((value) => {
+              errors.push(Object.values(value))
+            })
+            this.warningSU = errors
+            this.$nuxt.$emit('alert_status')
           }
         })
 

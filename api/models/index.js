@@ -13,6 +13,7 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     idle: config.pool.idle,
   },
   port: config.port,
+  logging: false
 })
 
 const db = {}

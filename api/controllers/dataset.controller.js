@@ -21,10 +21,11 @@ exports.postSerialNums = (req, res) => {
   const { serial_nums, global_status, local_status, location, box, username } = req.body
   console.log(req.body)
   const table_inst = new TableMutation()
-  // const warningSU = table_inst.checkRowsStatuses(serial_nums, global_status, local_status)
-  const mismatchSU = table_inst.updateRows(serial_nums, global_status, local_status, location, box, username)
+  table_inst.updateRows(serial_nums, global_status, local_status, location, box, username)
 
-  const p1 = new Promise((resolve, reject) => {
+  res.send({ message: 'Данные обновлены!' })
+
+  /* const p1 = new Promise((resolve, reject) => {
     try {
       setTimeout(() => resolve(mismatchSU), 500) // add timeout for load data
       setTimeout(() => reject(new Error('Something went wrong!')), 500)
@@ -33,8 +34,8 @@ exports.postSerialNums = (req, res) => {
     }
   })
   p1.then((values) => {
-    res.send({ message: 'Данные добавлены!', matching_SU: values })
-  })
+
+  }) */
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

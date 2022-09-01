@@ -9,13 +9,13 @@
     >
       <v-card>
         <v-card-title>
-          <span class="text-h5">There is no data on the current number in the database. Check the correctness of the filling!</span>
+          <span class="text-h5">Error entering the ordinal status. Check the correctness of the filling!</span>
         </v-card-title>
         <v-textarea
           background-color="primary lighten-1"
           filled
           auto-grow
-          :value="su"
+          :value="statuses"
         />
         <v-card-actions>
           <v-spacer />
@@ -34,9 +34,9 @@
 <script>
 
 export default {
-  name: 'FailSUAllert',
+  name: 'FailStatusAlert',
   // eslint-disable-next-line vue/require-prop-types
-  props: ['su'],
+  props: ['statuses'],
   data () {
     return {
       dialog: false,
@@ -44,12 +44,12 @@ export default {
     }
   },
   mounted () {
-    this.$nuxt.$on('alert_input', () => {
+    this.$nuxt.$on('alert_status', () => {
       this.dialog = true
     })
   },
   beforeDestroy () {
-    this.$nuxt.$off('alert_input')
+    this.$nuxt.$off('alert_status')
   },
   methods: {
     closeDialog () {

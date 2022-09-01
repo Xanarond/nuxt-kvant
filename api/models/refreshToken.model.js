@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require('uuid')
 const config = require('../config/auth.config')
 
 module.exports = (sequelize, Sequelize) => {
-  const RefreshToken = sequelize.define('refreshToken', {
+  const RefreshToken = sequelize.define('refresh_token', {
     token: {
       type: Sequelize.STRING,
     },

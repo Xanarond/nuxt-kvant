@@ -5,10 +5,10 @@ module.exports = (sequelize, Sequelize) =>
       primaryKey: true,
     },
     'On Repair': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Pre-stock after repair': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     }
   },
   {

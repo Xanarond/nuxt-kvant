@@ -55,8 +55,7 @@ module.exports = (app) => {
     userCont.archiveTable
   )
 
-  // TODO verifySUnumbers.checkWrongNumbers изменить логику для мидлваря
-  app.post('/api/datasets/update', [authJwt.verifyToken], datasetCont.postSerialNums)
+  app.post('/api/datasets/update', [authJwt.verifyToken, verifySUnumbers.checkWrongNumbers, verifySUnumbers.checkStatusValidation], datasetCont.postSerialNums)
   app.post('/api/datasets/insert', [authJwt.verifyToken, authJwt.isAdmin], datasetCont.postDataSet)
 
   app.get('/api/file_info', datasetCont.getFileInfo)

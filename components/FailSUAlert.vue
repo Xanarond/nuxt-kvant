@@ -34,7 +34,7 @@
 <script>
 
 export default {
-  name: 'FailSUAllert',
+  name: 'FailSUAlert',
   // eslint-disable-next-line vue/require-prop-types
   props: ['numbers'],
   data () {

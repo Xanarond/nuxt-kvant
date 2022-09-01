@@ -49,31 +49,6 @@ export default class TableMutation {
     return compareArr
   }
 
-  checkRowsStatuses (su_numbers, department, local_status) {
-    const warningSU = []
-    su_numbers.forEach((val) => {
-      Total.findOne({
-        where: {
-          SU: val,
-        },
-        raw: true
-      }).then((row) => {
-        switch (department) {
-          case 'Inspection':
-            // eslint-disable-next-line no-mixed-operators
-            if (local_status === 'Pending' || local_status === 'Pre-stock after Inspection' && row['Local Status'] === 'Pending' || row['Local Status'] === 'Pre-stock after Inspection') {
-              warningSU.push(row.SU)
-            }
-            // eslint-disable-next-line no-mixed-operators
-            if (local_status === 'Pre-stock after Inspection' || local_status === 'Pre-scrap' && row['Local Status'] === 'Pre-stock after Inspection' || row['Local Status'] === 'Pre-scrap') {
-              warningSU.push(row.SU)
-            }
-        }
-      })
-    })
-    return warningSU
-  }
-
   singleEdit () {
 
   }
@@ -414,19 +389,5 @@ export default class TableMutation {
           })
         })
     })
-
-    const totalSU = []
-    su_numbers.forEach((value) => {
-      Total.findOne({
-        where: { SU: value },
-        raw: true
-      }).then((row) => {
-        totalSU.push(row.SU)
-      })
-    })
-    return totalSU
-  }
-
-  checkStatusesRows () {
   }
 }

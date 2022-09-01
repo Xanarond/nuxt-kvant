@@ -5,19 +5,19 @@ module.exports = (sequelize, Sequelize) =>
       primaryKey: true,
     },
     Pending: {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
-    'Pre-stock after inspection': {
-      type: Sequelize.STRING,
+    'Pre-stock after Inspection': {
+      type: Sequelize.BOOLEAN,
     },
     'Pre-scrap': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
     'Scrap after approval': {
-      type: Sequelize.STRING,
+      type: Sequelize.BOOLEAN,
     },
-    'Transfer scrap': {
-      type: Sequelize.STRING,
+    'Transfer Scrap': {
+      type: Sequelize.BOOLEAN,
     },
   },
   {
