@@ -88,7 +88,7 @@ exports.refreshToken = async (req, res) => {
   const { refreshToken: requestToken } = req.body
 
   if (requestToken == null) {
-    return res.status(403).json({ message: 'Refresh Token is required!' })
+    return res.status(403).redirect(`${process.env.API_HOST}/login`).json({ message: 'Refresh Token is required!' })
   }
 
   try {
@@ -99,14 +99,14 @@ exports.refreshToken = async (req, res) => {
     // console.log(refreshToken)
 
     if (!refreshToken) {
-      res.status(403).json({ message: 'Refresh token is not in database!' })
+      res.status(403).redirect(`${process.env.API_HOST}/login`).json({ message: 'Refresh token is not in database!' })
       return
     }
 
     if (RefreshToken.verifyExpiration(refreshToken)) {
       RefreshToken.destroy({ where: { id: refreshToken.id } })
 
-      res.status(403).json({
+      res.status(403).redirect(`${process.env.API_HOST}/login`).json({
         message: 'Refresh token was expired. Please make a new signin request',
       })
       return

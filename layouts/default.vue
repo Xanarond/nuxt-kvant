@@ -38,7 +38,7 @@
         <AddItemDialog />
       </div>
       <v-btn
-        v-if="useAdminRules"
+        v-if="useAdminRules || $store.state.user.division === 'Inspection' && !useAdminRules"
         depressed
         nuxt
         to="/append"

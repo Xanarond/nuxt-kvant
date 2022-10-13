@@ -59,17 +59,17 @@
         </DxItem>
       </DxForm>
     </DxEditing>
-    <DxColumn :width="170" data-field="SU" data-type="number" />
+    <DxColumn :width="100" data-field="SU" data-type="number" />
     <DxColumn data-field="MATERIAL" caption="MATERIAL" />
     <DxColumn data-field="CLAIM" />
     <DxColumn data-field="INCH (FACT)" />
-    <DxColumn :width="180" data-field="SERIAL NUMBER" />
+    <DxColumn :width="240" data-field="SERIAL NUMBER" />
     <DxColumn :width="170" data-field="RB BARCODE" />
     <DxColumn data-field="COMMENT" />
     <DxColumn data-field="1st Insp DATE" data-type="date" format="dd.MM.yyyy" />
     <DxColumn data-field="2nd Insp DATE" data-type="date" format="dd.MM.yyyy" />
     <DxColumn data-field="Global Status" alignment="center" />
-    <DxColumn data-field="Local Status" alignment="center" />
+    <DxColumn :width="170" data-field="Local Status" alignment="center" />
     <DxColumn data-field="BOX" alignment="center" />
     <DxColumn data-field="Location" alignment="center" />
     <DxScrolling

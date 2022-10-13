@@ -1,10 +1,11 @@
-const inspection = `INSERT INTO public.inspection_validation("Local Status", "Pending", "Pre-stock after Inspection", "Pre-scrap", "Scrap after approval", "Transfer Scrap")
+const inspection = `INSERT INTO public.inspection_validation("Local Status", "Pending", "Pre-stock after Inspection", "Pre-scrap", "Transfer Scrap")
 VALUES
-('Pending', null, false, false, false, false),
-('Pre-stock after Inspection', true, null, false, false, false),
-('Pre-scrap', false, true, null, true, false),
-('Scrap after approval', false, false, false, null, false),
-('Transfer Scrap', false, false, true, true, null)`
+('Pending', null, false, true, false),
+('Pre-stock after Inspection', true, null, false, false),
+('Pre-scrap', true, false, null, true),
+('Transfer Scrap', false, false, true, null)`
+
+// ('Scrap after approval', false, false, false, null, false),
 
 const storage = `INSERT INTO public.storage_validation(
 "Local Status", "Stock", "Pre-repair on SRDC", "Pre-repair on SERK",

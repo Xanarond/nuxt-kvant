@@ -13,9 +13,6 @@ module.exports = (sequelize, Sequelize) =>
     'Pre-scrap': {
       type: Sequelize.BOOLEAN,
     },
-    'Scrap after approval': {
-      type: Sequelize.BOOLEAN,
-    },
     'Transfer Scrap': {
       type: Sequelize.BOOLEAN,
     },

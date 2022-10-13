@@ -12,13 +12,20 @@ export default ({ store }) => {
       console.log(config)
       return config
     },
-    error => Promise.reject(error)
+    (error) => {
+      console.log(error)
+      Promise.reject(error)
+    }
   )
 
   api.interceptors.response.use(
-    res => res,
+    (res) => {
+      console.log(res)
+      return res
+    },
     async (err) => {
       const originalConfig = err.config
+      console.log(originalConfig)
       // eslint-disable-next-line no-console
       if (originalConfig.url !== '/auth/signin' && err.response) {
         // Access Token was expired
@@ -37,10 +44,12 @@ export default ({ store }) => {
 
             return api(originalConfig)
           } catch (_error) {
+            console.log(_error)
             return Promise.reject(_error)
           }
         }
       }
+      console.log(err)
       return Promise.reject(err)
     }
   )

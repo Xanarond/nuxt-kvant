@@ -13,7 +13,7 @@
           id="app"
           :key="componentKey"
           method="post"
-          @submit.prevent="handleItemAdd"
+          @submit="handleItemAdd"
         >
           <v-card>
             <v-card-title>
@@ -80,17 +80,47 @@
                   />
                 </v-col>
               </v-row>
-              <v-row justify="center">
-                <v-col cols="10">
-                  <v-divider class="pa-0" />
-                </v-col>
-              </v-row>
+              <v-container>
+                <v-row justify="center">
+                  <v-col cols="2">
+                    <div v-if="field === false" class="con">
+                      <v-btn
+                        v-model="field"
+                        :loading="loading"
+                        :disabled="loading"
+                        elevation="2"
+                        @click.prevent="changeInput(true)"
+                        @click="loader = 'loading'"
+                      >
+                        List/TextField
+                      </v-btn>
+                    </div>
+                    <div v-else>
+                      <v-btn
+                        v-model="field"
+                        :loading="loading"
+                        :disabled="loading"
+                        elevation="2"
+                        @click.prevent="changeInput(false)"
+                        @click="loader = 'loading'"
+                      >
+                        List/TextField
+                      </v-btn>
+                    </div>
+                  </v-col>
+                </v-row>
+                <v-row justify="center">
+                  <v-col cols="10">
+                    <v-divider class="pa-0" />
+                  </v-col>
+                </v-row>
+              </v-container>
             </v-container>
             <v-card-text>
               <v-container>
-                <v-row>
+                <v-row v-if="field === false">
                   <v-col cols="12" md="1">
-                    <template v-for="(index) in 150">
+                    <template v-for="(index) in 100">
                       <v-text-field
                         :key="index"
                         :value="index"
@@ -100,7 +130,7 @@
                     </template>
                   </v-col>
                   <v-col cols="12" md="11">
-                    <template v-for="(item, index) in 150">
+                    <template v-for="(item, index) in 100">
                       <v-text-field
                         :key="item.key"
                         ref="field"
@@ -111,6 +141,14 @@
                     </template>
                   </v-col>
                 </v-row>
+                <v-row v-else>
+                  <v-textarea
+                    v-model="su"
+                    background-color="primary lighten-1"
+                    filled
+                    auto-grow
+                  />
+                </v-row>
               </v-container>
             </v-card-text>
             <v-card-actions>
@@ -119,7 +157,7 @@
                 Close
               </v-btn>
               <v-btn
-                v-if="panels.length === 0 || section.length === 0 && status === ''"
+                v-if="(status === '' && panels.length !== 0 && su.length === 0) || (status === '' && su.length !== 0 && panels.length === 0)"
                 color="blue darken-1"
                 type="submit"
                 text
@@ -178,7 +216,11 @@ export default {
     mismatchSU: [],
     warningSU: [],
     alert_input: false,
-    dialogKey: 0
+    dialogKey: 0,
+    field: false,
+    loader: null,
+    loading: false,
+    su: []
   }),
   computed: {
     manageItems () {
@@ -190,7 +232,7 @@ export default {
     manageAdminLocalStatus () {
       switch (this.section) {
         case 'Inspection':
-          return ['Pre-stock after Inspection', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
+          return ['Pre-stock after Inspection', 'Pre-scrap', 'Transfer Scrap']
         case 'Storage':
           return ['Stock', 'Pre-repair on SRDC', 'Pre-repair on SERK', 'Transfer to SERK', 'Transfer to Consignment', 'Pre-verification', 'Transfer verification', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         case 'Repair':
@@ -203,7 +245,7 @@ export default {
     manageLocalStatus () {
       switch (this.$store.state.user.division) {
         case 'Inspection':
-          return ['Pre-stock after Inspection', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
+          return ['Pre-stock after Inspection', 'Pre-scrap', 'Transfer Scrap']
         case 'Storage':
           return ['Stock', 'Pre-repair on SRDC', 'Pre-repair on SERK', 'Transfer to SERK', 'Transfer to Consignment', 'Pre-verification', 'Transfer verification', 'Pre-scrap', 'Scrap after approval', 'Transfer Scrap']
         case 'Repair':
@@ -222,8 +264,21 @@ export default {
       return false
     }
   },
+  watch: {
+    loader () {
+      const l = this.loader
+      this[l] = !this[l]
+
+      setTimeout(() => (this[l] = false), 1200)
+
+      this.loader = null
+    },
+  },
 
   methods: {
+    changeInput (isList) {
+      this.field = isList
+    },
     closeDialog () {
       this.panels = []
       this.section = ''
@@ -236,22 +291,35 @@ export default {
       this.alert_status = false
       this.mismatchSU = []
       this.warningSU = []
+      this.su = []
     },
     handleItemAdd () {
-      const panelsSet = new Set(this.panels)
-      // console.log([...panelsSet].flat(1), this.section, this.status, this.location, this.box)
+      let panelsSet
+
+      if (this.field === true) {
+        panelsSet = new Set(this.su.split('\n'))
+      } else {
+        panelsSet = new Set(this.panels)
+      }
+      console.log(panelsSet)
+
+      if (this.currentUser.role !== 'ROLE_ADMIN') {
+        this.section = this.$store.state.user.division
+      }
+
       TableService.postItems([...panelsSet].flat(1), this.section, this.status, this.location, this.box, this.$store.state.user.username)
         .then((value) => {
-          console.log(value.data)
-          if (value.data.mismatchSU > 0 && value.data.alert === true) {
+          // console.log(value.data.warningSU)
+          if (value.data.mismatchSU !== undefined && value.data.mismatchSU.length > 0 && value.data.alert === true) {
             this.mismatchSU = value.data.mismatchSU
             this.$nuxt.$emit('alert_input')
           }
           if (value.data.warningSU !== undefined && value.data.warningSU.length > 0 && value.data.alert === true) {
             const errors = []
             value.data.warningSU.forEach((value) => {
-              errors.push(Object.values(value))
+              errors.push(value)
             })
+            console.log(errors)
             this.warningSU = errors
             this.$nuxt.$emit('alert_status')
           }
@@ -262,6 +330,7 @@ export default {
       this.status = ''
       this.location = ''
       this.box = ''
+      this.su = []
       this.componentKey += 1
     }
   }

@@ -1,4 +1,5 @@
 import TableMutation from '../mutations/tableMutation'
+
 const fs = require('fs')
 const { Client } = require('pg')
 const XLSX = require('xlsx')
@@ -24,18 +25,7 @@ exports.postSerialNums = (req, res) => {
   table_inst.updateRows(serial_nums, global_status, local_status, location, box, username)
 
   res.send({ message: 'Данные обновлены!' })
-
-  /* const p1 = new Promise((resolve, reject) => {
-    try {
-      setTimeout(() => resolve(mismatchSU), 500) // add timeout for load data
-      setTimeout(() => reject(new Error('Something went wrong!')), 500)
-    } catch (e) {
-      console.log(e)
-    }
-  })
-  p1.then((values) => {
-
-  }) */
+  return ''
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

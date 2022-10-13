@@ -137,7 +137,7 @@ checkStatusValidation = async (req, res, next) => {
         if (!warning_obj.indicator) {
           warningSU.push(warning_obj)
         }
-      } else if ((row.gs === 'Inspection' && row.ls === 'Pre-stock after Inspection' && req.body.local_status === 'Stock') ||
+      } else if ((row.gs === 'Inspection' && row.ls === 'Pre-stock after Inspection' && req.body.local_status === 'Stock' || req.body.local_status === 'Pre-repair on SRDC' || req.body.local_status === 'Pre-repair on SERK') ||
         (row.gs === 'Repair' && row.ls === 'Pre-stock after repair' && req.body.local_status === 'Stock')) {
         const warning_obj = {
           su: row.su,

@@ -34,8 +34,8 @@ const ssl_server = https.createServer(httpsOptions, app).listen(8443, () => {
 // {force: true}
 const Role = db.role
 const User = db.user
-
-db.sequelize.sync({ force: true })
+// { force: true }
+db.sequelize.sync()
   .then(() => {
     initial()
   })
@@ -65,6 +65,52 @@ function initial () {
         user.setRoles(roles)
       })
     }))
+
+  User.create({
+    username: 'stock',
+    division: 'Storage',
+    password: bcrypt.hashSync('123', 8),
+    role: 'worker'
+  }).then((user) => {
+    Role.findOne({
+      where: {
+        name: 'worker'
+      }
+    }).then((roles) => {
+      user.setRoles(roles)
+    })
+  })
+
+  User.create({
+    username: 'insp',
+    division: 'Inspection',
+    password: bcrypt.hashSync('123', 8),
+    role: 'worker'
+  }).then((user) => {
+    Role.findOne({
+      where: {
+        name: 'worker'
+      }
+    }).then((roles) => {
+      user.setRoles(roles)
+    })
+  })
+
+  User.create({
+    username: 'repa',
+    division: 'Repair',
+    password: bcrypt.hashSync('123', 8),
+    role: 'worker'
+  }).then((user) => {
+    Role.findOne({
+      where: {
+        name: 'worker'
+      }
+    }).then((roles) => {
+      user.setRoles(roles)
+    })
+  })
+
   db.sequelize.query(valid_obj.inspection)
   db.sequelize.query(valid_obj.storage)
   db.sequelize.query(valid_obj.repair)

@@ -168,6 +168,15 @@ export default class TableMutation {
                   'Putaway DATE': this.cur_date
                 }, { where: { id: row.id } })
 
+                Storage.update({
+                  'Global Status': department,
+                  'Local Status': local_status,
+                  Location: location,
+                  BOX: box,
+                  Responsible_user: username,
+                  'Putaway DATE': this.cur_date
+                }, { where: { SU: row.SU } })
+
                 Inspection.destroy({
                   where: {
                     SU: row.SU
@@ -266,7 +275,9 @@ export default class TableMutation {
                   break
               }
             }
-            if (department === 'Repair') {
+            // eslint-disable-next-line no-empty
+            if (department !== 'Repair') {
+            } else {
               if (local_status === 'On Repair') {
                 Total.update({
                   'Global Status': department,
@@ -306,6 +317,14 @@ export default class TableMutation {
                   Responsible_user: username
                 }, { where: { id: row.id } })
 
+                Repair.update({
+                  'Global Status': department,
+                  'Local Status': local_status,
+                  Location: location,
+                  BOX: box,
+                  Responsible_user: username
+                }, { where: { SU: row.SU } })
+
                 Inspection.destroy({
                   where: {
                     SU: row.SU
@@ -318,35 +337,31 @@ export default class TableMutation {
                   }
                 })
               }
+              if (local_status === 'Pre-stock after repair') {
+                Total.update({
+                  'Global Status': department,
+                  'Local Status': local_status,
+                  Location: location,
+                  BOX: box,
+                  Responsible_user: username,
+                  'Scrap DATE': this.cur_date
+                }, { where: { SU: row.SU } })
 
-              switch (local_status) {
-                case 'SRDC repair complete':
-                case 'Pre-stock after repair':
-                  Total.update({
-                    'Global Status': department,
-                    'Local Status': local_status,
-                    Location: location,
-                    BOX: box,
-                    Responsible_user: username,
-                    'Scrap DATE': this.cur_date
-                  }, { where: { SU: row.SU } })
+                Repair.update({
+                  'Global Status': department,
+                  'Local Status': local_status,
+                  Location: location,
+                  BOX: box,
+                  Responsible_user: username
+                }, { where: { SU: row.SU } })
 
-                  Repair.update({
-                    'Global Status': department,
-                    'Local Status': local_status,
-                    Location: location,
-                    BOX: box,
-                    Responsible_user: username
-                  }, { where: { SU: row.SU } })
-
-                  Archive.update({
-                    'Global Status': department,
-                    'Local Status': local_status,
-                    Location: location,
-                    BOX: box,
-                    Responsible_user: username
-                  }, { where: { id: row.id } })
-                  break
+                Archive.update({
+                  'Global Status': department,
+                  'Local Status': local_status,
+                  Location: location,
+                  BOX: box,
+                  Responsible_user: username
+                }, { where: { id: row.id } })
               }
             }
             // Общая логика по статусам

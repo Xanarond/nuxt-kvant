@@ -5,6 +5,9 @@
     </div>
     <div v-else>
       <v-row justify="end" class="pe-2">
+        <v-col align-self="center">
+          <v-toolbar-title>Storage Table</v-toolbar-title>
+        </v-col>
         <v-col cols="3">
           <UpdateButton />
         </v-col>

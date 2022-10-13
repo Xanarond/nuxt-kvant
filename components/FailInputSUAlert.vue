@@ -22,7 +22,7 @@
           <v-btn
             color="red darken-1"
             text
-            @click.stop="closeDialog"
+            @click="dialog = false"
           >
             OK
           </v-btn>

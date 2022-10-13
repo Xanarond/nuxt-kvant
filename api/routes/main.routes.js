@@ -56,7 +56,7 @@ module.exports = (app) => {
   )
 
   app.post('/api/datasets/update', [authJwt.verifyToken, verifySUnumbers.checkWrongNumbers, verifySUnumbers.checkStatusValidation], datasetCont.postSerialNums)
-  app.post('/api/datasets/insert', [authJwt.verifyToken, authJwt.isAdmin], datasetCont.postDataSet)
+  app.post('/api/datasets/insert', [authJwt.verifyToken, authJwt.isWorkerInspectionOrAdmin], datasetCont.postDataSet)
 
   app.get('/api/file_info', datasetCont.getFileInfo)
 }
