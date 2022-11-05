@@ -55,7 +55,7 @@
                     v-model="$store.state.user.division"
                     :item-value="$store.state.user.division"
                     :item-text="$store.state.user.division"
-                    :items="[...$store.state.user.division]"
+                    :items="[$store.state.user.division]"
                     label="Global Status"
                     required
                     class="pa-0"
