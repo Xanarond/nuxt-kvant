@@ -64,8 +64,6 @@ checkStatusValidation = async (req, res, next) => {
                               JOIN PUBLIC.INSPECTION_VALIDATION AS T2 ON (T1."Local Status" != T2."Local Status")
                               WHERE "SU" in (${row.su}) AND T2."Local Status" = '${req.body.local_status}'  -- указывать следующий статус после текущего`
 
-        console.log(sql_query)
-
         const warnings = await db.sequelize.query(sql_query)
 
         const warning_obj = {
@@ -124,7 +122,6 @@ checkStatusValidation = async (req, res, next) => {
                               JOIN PUBLIC.STORAGE_VALIDATION AS T2 ON (T1."Local Status" != T2."Local Status")
                               WHERE "SU" in (${row.su}) AND T2."Local Status" = '${req.body.local_status}'`
 
-        console.log(sql_query)
 
         const warnings = await db.sequelize.query(sql_query)
 
@@ -194,7 +191,6 @@ checkStatusValidation = async (req, res, next) => {
                               JOIN PUBLIC.REPAIR_VALIDATION AS T2 ON (T1."Local Status" != T2."Local Status")
                               WHERE "SU" in (${row.su}) AND T2."Local Status" = '${req.body.local_status}'`
 
-        console.log(sql_query)
 
         const warnings = await db.sequelize.query(sql_query)
 

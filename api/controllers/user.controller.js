@@ -11,7 +11,6 @@ exports.mainTable = (req, res) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 exports.inspectionTable = (req, res) => {
-  console.log(req.status)
   Inspection.findAll().then((data) => {
     res.send(data)
   })
@@ -19,7 +18,6 @@ exports.inspectionTable = (req, res) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 exports.repairTable = (req, res) => {
-  console.log(req.status)
   Repair.findAll().then((data) => {
     res.send(data)
   })
@@ -27,7 +25,6 @@ exports.repairTable = (req, res) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 exports.storageTable = (req, res) => {
-  console.log(req.status)
   Storage.findAll().then((data) => {
     res.send(data)
   })

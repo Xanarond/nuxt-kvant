@@ -20,7 +20,6 @@ client.connect()
 exports.postSerialNums = (req, res) => {
   // let required_id = ''
   const { serial_nums, global_status, local_status, location, box, username } = req.body
-  console.log(req.body)
   const table_inst = new TableMutation()
   table_inst.updateRows(serial_nums, global_status, local_status, location, box, username)
 
@@ -45,7 +44,6 @@ exports.getFileInfo = (req, res) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 exports.postDataSet = (req, res) => {
-  console.log(req.body)
   const workbook = XLSX.readFile(FILE_PATHNAME, { type: 'binary', cellDates: true })
   const sheet_name_list = workbook.SheetNames
   const xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])

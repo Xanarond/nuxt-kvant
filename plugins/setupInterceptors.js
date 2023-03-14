@@ -9,7 +9,6 @@ export default ({ store }) => {
         config.headers['x-access-token'] = token // for Node.js Express back-end
       }
       // eslint-disable-next-line no-console
-      console.log(config)
       return config
     },
     (error) => {
@@ -25,7 +24,6 @@ export default ({ store }) => {
     },
     async (err) => {
       const originalConfig = err.config
-      console.log(originalConfig)
       // eslint-disable-next-line no-console
       if (originalConfig.url !== '/auth/signin' && err.response) {
         // Access Token was expired
