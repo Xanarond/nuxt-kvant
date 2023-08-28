@@ -1,68 +1,63 @@
-# nuxt-kwant
+Цель: Разработать базу данных "КВАНТ" для учета жидкокристаллических (ЖК) панелей, содержащую актуальные данные о материалах и историю перемещений.
 
-## Build Setup
+Взаимодействие:
+    Разделы: Координатор, Инспекция, Кладовщики, Ремонт.
+    Авторизация: Реализовать механизм авторизации для четырех подразделений, обеспечивая соответствующие права доступа.
 
-```bash
-# install dependencies
-$ yarn install
+    Проект включает в себя ряд технических решений и функциональных возможностей, направленных на учет и управление жидкокристаллическими (ЖК) панелями в рамках системы "КВАНТ". В качестве технологической основы использованы Nuxt.js, Express.js, PostgreSQL и ORM Sequelize. Основной акцент сделан на обеспечение безопасности, эффективности и удобства использования.
+    
+1.	Авторизация и Ролевая аутентификация:
+o	Разработан механизм аутентификации с использованием ролей пользователей.
+o	Каждому типу пользователя (Координатор, Инспекция, Кладовщики, Ремонт) предоставлены соответствующие права доступа.
+2.	Уникальные таблицы для разных типов пользователей:
+o	Реализовано создание уникальных таблиц для каждой роли пользователей, что позволяет более точно управлять данными о перемещении панелей.
+3.	Учет "движения" панелей:
+o	Разработан функционал для учета перемещения ЖК панелей между различными подразделениями.
+o	Обеспечено точное отслеживание местоположения панелей в реальном времени.
+4.	Интеграция загрузки данных из файлов Excel:
+o	Реализован механизм загрузки данных из файлов Excel.
+o	Этот функционал значительно упрощает и ускоряет внесение информации в систему.
+5.	Архивная история перемещений:
+o	Создана функция хранения архивной истории перемещений панелей.
+o	Это позволяет производить более глубокий анализ данных и выявлять тренды.
+6.	Оптимизация учета процессов:
+o	Проект позволяет более эффективно управлять, отслеживать и анализировать движение ЖК панелей внутри системы "КВАНТ".
+Технологическая стек:
+o	Frontend: Nuxt.js
+o	Backend: Express.js
+o	База данных: PostgreSQL
+o	ORM: Sequelize
+Проект представляет собой полноценную систему учета и управления данными о ЖК панелях, обеспечивая авторизацию, точное отслеживание перемещений и возможность загрузки данных для более удобной работы пользователей разных ролей.
 
-# serve with hot reload at localhost:3000
-$ yarn dev
+Objective: To develop a database "QUANTUM" for accounting for liquid crystal (LCD) panels, containing up-to-date data on materials and the history of movements.
 
-# build for production and launch index
-$ yarn build
-$ yarn start
+Interaction:
+Sections: Coordinator, Inspection, Storekeepers, Repair.
+Authorization: Implement an authorization mechanism for four departments, providing appropriate access rights.
 
-# generate static project
-$ yarn generate
-```
+The project includes a number of technical solutions and functionality aimed at accounting and management of liquid crystal (LCD) panels within the "QUANTUM" system. Nuxt is used as a technological basis.js, Express.js, PostgreSQL and ORM Sequelize. The main focus is on ensuring safety, efficiency and usability.
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+1. Authorization and Role authentication:
+o An authentication mechanism using user roles has been developed.
+o Each type of user (Coordinator, Inspection, Storekeepers, Repair) is granted the appropriate access rights.
+2. Unique tables for different types of users:
+o The creation of unique tables for each user role is implemented, which allows you to more accurately manage data on the movement of panels.
+3. Accounting for the "movement" of panels:
+o A functional has been developed to account for the movement of LCD panels between different divisions.
+o Provides accurate tracking of the location of panels in real time.
+4. Integration of data loading from Excel files:
+o The mechanism of loading data from Excel files is implemented.
+o This functionality greatly simplifies and speeds up the introduction of information into the system.
+5. Archival history of movements:
+o The function of storing the archived history of panel movements has been created.
+o This allows for deeper data analysis and identification of trends.
+6. Process accounting optimization:
+o The project allows you to more effectively manage, monitor and analyze the movement of LCD panels inside the KVANT system.
+Technology stack:
+o Frontend: Nuxt.js
+o Backend: Express.js
+o Database: PostgreSQL
+o ORM: Sequelize
+The project is a full-fledged system of accounting and data management of LCD panels, providing authorization, accurate tracking of movements and the ability to upload data for more convenient work of users of different roles.
 
-## Special Directories
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
-
-### `assets`
-
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
-
-### `components`
-
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
-
-### `layouts`
-
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
-
-### `pages`
-
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
-
-### `plugins`
-
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
-
-### `static`
-
-This directory contains your static files. Each file inside this directory is mapped to `/`.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
-
-### `store`
-
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
