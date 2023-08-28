@@ -22,7 +22,8 @@
 -	Это позволяет производить более глубокий анализ данных и выявлять тренды.
 6.	Оптимизация учета процессов:
 -	Проект позволяет более эффективно управлять, отслеживать и анализировать движение ЖК панелей внутри системы "КВАНТ".
-Технологическая стек:
+
+  Технологическая стек:
 -	Frontend: Nuxt.js
 -	Backend: Express.js
 -	База данных: PostgreSQL
@@ -40,7 +41,7 @@
 | Ремонт      | repa     | 123    | Отметка о неисправностях и ремонте панелей. Обновление информации о состоянии панелей. Полный доступ к архиву и истории перемещений.|  
 ________________________________________________________________________________________________________________________________________________________________________________
 
-Objective: To develop a database "QUANTUM" for accounting for liquid crystal (LCD) panels, containing up-to-date data on materials and the history of movements.
+Objective: To develop a database "KVANT" for accounting for liquid crystal (LCD) panels, containing up-to-date data on materials and the history of movements.
 
 Interaction:
 Sections: Coordinator, Inspection, Storekeepers, Repair.
@@ -64,7 +65,8 @@ The project includes a number of technical solutions and functionality aimed at 
 - This allows for deeper data analysis and identification of trends.
 6. Process accounting optimization:
 - The project allows you to more effectively manage, monitor and analyze the movement of LCD panels inside the KVANT system.
-Technology stack:
+
+  Technology stack:
 - Frontend: Nuxt.js
 - Backend: Express.js
 - Database: PostgreSQL
