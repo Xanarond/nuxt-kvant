@@ -27,7 +27,18 @@
 -	Backend: Express.js
 -	База данных: PostgreSQL
 -	ORM: Sequelize
+
 Проект представляет собой полноценную систему учета и управления данными о ЖК панелях, обеспечивая авторизацию, точное отслеживание перемещений и возможность загрузки данных для более удобной работы пользователей разных ролей.
+
+Превью версия находится по ссылке http://92.63.98.23:8080/. Данные учетных записей для теста представлены ниже:
+
+| Роль       | Логин       | Пароль    | Возможности                                                                                                                                                                     |
+|------------|-------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Админ      | admin       | 123       | Полный доступ ко всем функциональным возможностям системы. Управление пользователями, настройками и данными. Загрузка данных о панелях из файлов Excel.|
+| Инспекция   | insp   | 123    | Загрузка данных о панелях из файлов Excel.  Проверка и подтверждение перемещения панелей. Просмотр текущей информации о панелях. Полный доступ к архиву и истории перемещений.                   |
+| Кладовщик   | stock | 123  | Управление перемещением панелей в рамках склада и отдела. Полный доступ к архиву и истории перемещений. |
+| Ремонт      | repa     | 123    | Отметка о неисправностях и ремонте панелей. Обновление информации о состоянии панелей. Полный доступ к архиву и истории перемещений.|  
+________________________________________________________________________________________________________________________________________________________________________________
 
 Objective: To develop a database "QUANTUM" for accounting for liquid crystal (LCD) panels, containing up-to-date data on materials and the history of movements.
 
@@ -58,6 +69,14 @@ Technology stack:
 - Backend: Express.js
 - Database: PostgreSQL
 - ORM: Sequelize
+
 The project is a full-fledged system of accounting and data management of LCD panels, providing authorization, accurate tracking of movements and the ability to upload data for more convenient work of users of different roles.
 
+The preview version is available at the link http://92.63.98.23:8080 /. The account details for the test are presented below:
+| Role | Login | Password | Features |
+|------------|-------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Admin | admin | 123 | Full access to all the functionality of the system. Manage users, settings and data. Loading panel data from Excel files.|
+| Inspection | insp | 123 | Loading panel data from Excel files. - Checking and confirming the movement of panels. View current panel information. Full access to the archive and the history of movements. |
+| Storekeeper | stock | 123 | Managing the movement of panels within the warehouse and department. Full access to the archive and the history of movements. |
+| Repair | repa | 123 | A note about malfunctions and repair of panels. - Updating information about the status of panels. Full access to the archive and the history of movements.|
 
