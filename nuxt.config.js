@@ -93,12 +93,7 @@ export default {
   serverMiddleware: {
     '/api': '~/api'
   },
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  /* ssr: true,
-  plugins: [
-    { src: '~/plugins/persistedState.client.js' },
-    { src: '~/middleware/setupInterceptors.js' }
-  ] */
+
   build: {
     serverMiddleware: {
       '/api': '~/api'

@@ -35,7 +35,7 @@ const ssl_server = https.createServer(httpsOptions, app).listen(8443, () => {
 const Role = db.role
 const User = db.user
 // { force: true }
-db.sequelize.sync()
+db.sequelize.sync({ force: true })
   .then(() => {
     initial()
   })

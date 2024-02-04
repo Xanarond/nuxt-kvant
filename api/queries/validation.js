@@ -3,7 +3,7 @@ VALUES
 ('Pending', null, false, true, false),
 ('Pre-stock after Inspection', true, null, false, false),
 ('Pre-scrap', true, false, null, true),
-('Transfer Scrap', false, false, true, null)`
+('Transfer Scrap', false, false, true, null) ON DUPLICATE KEY DO NOTHING `
 
 // ('Scrap after approval', false, false, false, null, false),
 
@@ -20,12 +20,12 @@ VALUES
 ('Transfer verification', false, false, false, false, false, true, null, false, false, false),
 ('Pre-scrap', true, true, false, false, false, false, false, null, true, false),
 ('Scrap after approval', true, false, false, false, false, false, false, false, null, false),
-('Transfer Scrap', false, false, false, false, false, false, false, true, true, null)`
+('Transfer Scrap', false, false, false, false, false, false, false, true, true, null) ON DUPLICATE KEY DO NOTHING `
 
 const repair = `INSERT INTO public.repair_validation(
 "Local Status", "On Repair", "Pre-stock after repair")
 VALUES ('On Repair', null, false),
-('Pre-stock after repair', true, null)`
+('Pre-stock after repair', true, null) ON DUPLICATE KEY DO NOTHING`
 
 export const valid_obj = {
   inspection,
