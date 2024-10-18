@@ -1,0 +1,47 @@
+{
+  "name": "kvant-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "primeicons": "^5.0.0",
+    "uuid": "^8.3.2",
+    "xlsx": "^0.18.5",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.1",
+    "core-js": "^3.19.3",
+    "cors": "^2.8.5",
+    "moment": "^2.29.3",
+    "sequelize": "^6.13.0" 
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.16.3",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^27.4.4",
+    "eslint": "8.22.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-nuxt": "^3.1.0",
+    "eslint-plugin-vue": "^8.2.0",
+    "husky": "^7.0.4",
+    "jest": "^27.4.4",
+    "lint-staged": "^12.1.2",
+    "prettier": "^2.5.1",
+    "stylelint": "^14.2.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-recommended-vue": "^1.1.0",
+    "stylelint-config-standard": "^24.0.0"
+  }
+}

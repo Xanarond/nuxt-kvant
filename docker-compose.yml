@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: kvantdb-host
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+      POSTGRES_DB: kvantdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    networks:
+      - kvantnet
+      
+  kvant:
+    container_name: kvant_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    expose:
+      - "8080"
+    environment:
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=8080
+      - API_HOST=http://api.kvant.kos-devpoint.ru/api
+      - SERVER_PORT=81
+      - FILE_PATHNAME=/usr/src/nuxt-app/excel_data/Panels.xlsb
+      - DB_HOST=kvantdb-host
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=1
+      - DB_DATABASE=kvantdb
+      - SERVER_PORT=81
+    depends_on:
+      - db
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.gzip.compress=true
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.routers.kvant_secure.entryPoints=https
+      - traefik.http.routers.kvant_secure.rule=Host(`kvant.kos-devpoint.ru`) && PathPrefix(`/`)
+      - traefik.http.routers.kvant_secure.tls.certresolver=letsencrypt
+      - traefik.http.routers.kvant_secure.tls=true
+      - traefik.http.services.kvant_secure.loadbalancer.server.port=8080  
+    networks:
+      - kvantnet
+      - coolify
+    volumes:
+      - ./:/usr/src/nuxt-app/excel_data
+  
+  kvant_backend:
+    container_name: kvant_backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - DB_HOST=kvantdb-host
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=1
+      - DB_DATABASE=kvantdb
+      - SERVER_PORT=81
+    expose:
+      - "81"
+    depends_on:
+      - db
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.gzip.compress=true
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.routers.api_kvant_secure.entryPoints=https
+      - traefik.http.routers.api_kvant_secure.rule=Host(`api.kvant.kos-devpoint.ru`) && PathPrefix(`/api`)
+      - traefik.http.routers.api_kvant_secure.tls.certresolver=letsencrypt
+      - traefik.http.routers.api_kvant_secure.tls=true
+      - traefik.http.services.api_kvant_secure.loadbalancer.server.port=81
+    volumes:
+      - ./:/usr/src/nuxt-app/excel_data
+    networks:
+      - kvantnet
+      - coolify
+      
+volumes:
+  db_data:
+
+networks:
+  kvantnet:
+    external: true
+  coolify:
+    external: true  
+
